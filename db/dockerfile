@@ -1,0 +1,16 @@
+# Use official PostgreSQL image as base
+FROM postgres:alpine3.19
+
+# Set environment variables
+ENV POSTGRES_DB=urbanfarm
+ENV POSTGRES_USER=admin
+ENV POSTGRES_PASSWORD=urbanfarm123
+
+# Copy SQL script to initialize database
+COPY init.sql /docker-entrypoint-initdb.d/
+
+# Expose PostgreSQL port
+EXPOSE 5432
+
+# Start PostgreSQL server
+CMD ["postgres"]

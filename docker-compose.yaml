@@ -59,4 +59,17 @@ services:
       - PERIOD=2s
       - MEASURES=temperature:285.15°K,temperature:286.15°K,humidity:12%
 
-    
+  db:
+    build: ./db/. 
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: urbanfarm
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: urbanfarm123
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    network_mode: "host"
+
+volumes:
+  db-data:
