@@ -64,11 +64,12 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: mydatabase
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: urbanfarm
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: urbanfarm123
     volumes:
       - db-data:/var/lib/postgresql/data
+      - ./src/database/init.sql:/docker-entrypoint-initdb.d/init.sql
     network_mode: "host"
 
   pgadmin:
