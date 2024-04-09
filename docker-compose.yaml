@@ -59,4 +59,31 @@ services:
       - PERIOD=2s
       - MEASURES=temperature:285.15°K,temperature:286.15°K,humidity:12%
 
-    
+  database:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: urbanfarm
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: urbanfarm123
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./src/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    network_mode: "host"
+  restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "pgadmin@example.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "5050:80"
+    depends_on:
+      - database
+    network_mode: "host"
+    restart: unless-stopped
+
+volumes:
+  db-data:
