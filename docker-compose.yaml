@@ -60,7 +60,7 @@ services:
       - MEASURES=temperature:285.15°K,temperature:286.15°K,humidity:12%
 
   db:
-    build: ./db/. 
+    build: ./soure/database/. 
     ports:
       - "5432:5432"
     environment:
