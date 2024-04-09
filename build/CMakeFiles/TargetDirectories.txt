@@ -1,0 +1,3 @@
+/home/mohamad/gitProjects/uniProjects/Urban_Farm/build/CMakeFiles/UrbanFarm.dir
+/home/mohamad/gitProjects/uniProjects/Urban_Farm/build/CMakeFiles/edit_cache.dir
+/home/mohamad/gitProjects/uniProjects/Urban_Farm/build/CMakeFiles/rebuild_cache.dir

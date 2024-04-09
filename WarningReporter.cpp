@@ -1,4 +1,5 @@
 #include "WarningReporter.h"
+#include "JsonSerializer.h"
 #include <cpprest/http_client.h>
 
 void WarningReporter::report(const SensorData& data) {
