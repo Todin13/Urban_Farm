@@ -16,12 +16,16 @@ int main()
     std::vector<std::pair<std::string, std::string>> blogs; // Vector to store blogs
 
     // Handler for POST request to add a blog
-    CROW_ROUTE(app, "/api/blogs").methods(crow::HTTPMethod::POST)
+    CROW_ROUTE(app, "/receive").methods(crow::HTTPMethod::POST)
     ([&](const crow::request& req)
     {
         auto body = crow::json::load(req.body);
         if (!body)
             return crow::response(400, "Invalid body");
+
+        // Print the body content
+        std::cout << "Received body: " << req.body << std::endl;
+
         std::string title, content;
         try {
             title = body["title"].s();
@@ -52,5 +56,5 @@ int main()
         return crow::json::wvalue{{"data", blog_data}};
     });
 
-    app.port(3000).multithreaded().run(); // Start the server
+    app.port(8080).multithreaded().run(); // Start the server
 }
