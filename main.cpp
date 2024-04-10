@@ -4,8 +4,10 @@
 
 int main() {
     // Initialize the database connector
-    DatabaseConnector dbConnector("host=localhost dbname=plant_monitoring user=postgres password=postgres");
-
+    const std::string connectionString = "host=localhost port=5433 dbname=urbanfarm user=admin password=urbanfarm123";
+    DatabaseConnector dbConnector(connectionString);
+    dbConnector.testQuery();
+    
     // Initialize the metrics collector
     MetricsCollector metricsCollector;
 

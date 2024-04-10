@@ -7,7 +7,7 @@
 class DatabaseConnector {
 public:
     explicit DatabaseConnector(const std::string& connectionString);
-    // Methods to interact with the database
+    void testQuery(); // Declare a method for testing a simple query
 
 private:
     pqxx::connection dbConnection;
