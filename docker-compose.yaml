@@ -58,6 +58,8 @@ services:
       - SENSOR_VERSION=FR-v7
       - PERIOD=2s
       - MEASURES=temperature:285.15°K,temperature:286.15°K,humidity:12%
+    depends_on:
+     - collecte_donnees
 
   database:
     image: postgres:latest
@@ -79,9 +81,24 @@ services:
       PGADMIN_DEFAULT_PASSWORD: "admin"
     ports:
       - "80:80"
+<<<<<<< HEAD
     depends_on:
       - database
     restart: unless-stopped  # This line should be indented to be part of the pgadmin service
+=======
+    depends_on:
+      - database
+    restart: unless-stopped  # This line should be indented to be part of the pgadmin service
+
+  collecte_donnees:
+    build:
+      context: src/collecte_donnees
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+>>>>>>> Lapin
 
 volumes:
   db-data:
