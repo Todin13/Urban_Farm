@@ -44,7 +44,7 @@ def inserer(donnees):
         # Valider la transaction
         conn.commit()
 
-        print("Ligne insérée dans la table")
+        print(f"Ligne insérée dans la table : {donnees}")
         
         """query = "SELECT * FROM SensorsData"
         cur.execute(query)
