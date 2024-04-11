@@ -1,3 +1,0 @@
-/home/todin/Working/Urban_Farm/src/datagestion/build/CMakeFiles/GUI.dir
-/home/todin/Working/Urban_Farm/src/datagestion/build/CMakeFiles/edit_cache.dir
-/home/todin/Working/Urban_Farm/src/datagestion/build/CMakeFiles/rebuild_cache.dir
