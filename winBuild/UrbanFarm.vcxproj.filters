@@ -1,34 +1,34 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="C:\Users\user\OneDrive-EPITA\Documents\2nd-Year\Programation\Cloud-Data-Engineering\Urban_Farm\main.cpp">
+    <ClCompile Include="C:\Users\user\Source\Repos\Urban_Farm\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\user\OneDrive-EPITA\Documents\2nd-Year\Programation\Cloud-Data-Engineering\Urban_Farm\AnomalyDetector.cpp">
+    <ClCompile Include="C:\Users\user\Source\Repos\Urban_Farm\AnomalyDetector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\user\OneDrive-EPITA\Documents\2nd-Year\Programation\Cloud-Data-Engineering\Urban_Farm\DatabaseConnector.cpp">
+    <ClCompile Include="C:\Users\user\Source\Repos\Urban_Farm\DatabaseConnector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\user\OneDrive-EPITA\Documents\2nd-Year\Programation\Cloud-Data-Engineering\Urban_Farm\JsonSerializer.cpp">
+    <ClCompile Include="C:\Users\user\Source\Repos\Urban_Farm\JsonSerializer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\user\OneDrive-EPITA\Documents\2nd-Year\Programation\Cloud-Data-Engineering\Urban_Farm\MetricsCollector.cpp">
+    <ClCompile Include="C:\Users\user\Source\Repos\Urban_Farm\MetricsCollector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\user\OneDrive-EPITA\Documents\2nd-Year\Programation\Cloud-Data-Engineering\Urban_Farm\RestServer.cpp">
+    <ClCompile Include="C:\Users\user\Source\Repos\Urban_Farm\RestServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\user\OneDrive-EPITA\Documents\2nd-Year\Programation\Cloud-Data-Engineering\Urban_Farm\WarningReporter.cpp">
+    <ClCompile Include="C:\Users\user\Source\Repos\Urban_Farm\WarningReporter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\user\OneDrive-EPITA\Documents\2nd-Year\Programation\Cloud-Data-Engineering\Urban_Farm\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\user\Source\Repos\Urban_Farm\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{85BF1541-B6D6-3B5A-9E39-ABAF41CFCE0B}</UniqueIdentifier>
+      <UniqueIdentifier>{107F8773-440D-3BA6-B95A-464001C334E3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -1,11 +1,11 @@
 version: '3.8'
 services:
-  # sensor1:
-  #   image: abelfodil/sensor:0.0.1
-  #   network_mode: "host"
-  #   environment:
-  #     - SERVER_URL=http://localhost:8080/receive
-  #     - SCENARIO_ID=1
+  sensor1:
+    image: abelfodil/sensor:0.0.1
+    network_mode: "host"
+    environment:
+      - SERVER_URL=http://localhost:8080/receive
+      - SCENARIO_ID=1
   # sensor2:
   #   image: abelfodil/sensor:0.0.1
   #   network_mode: "host"
@@ -69,7 +69,7 @@ services:
       POSTGRES_PASSWORD: urbanfarm123
     volumes:
       - db-data:/var/lib/postgresql/data
-      - ./src/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./src/database/urbanfarm_schema.sql:/docker-entrypoint-initdb.d/init.sql
     restart: unless-stopped  # This line should be indented to be part of the database service
 
   pgadmin:
