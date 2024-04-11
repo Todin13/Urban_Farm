@@ -12,7 +12,6 @@ include_directories(${CMAKE_SOURCE_DIR})
 if(WIN32)
     include("C:/Program Files/vcpkg/scripts/buildsystems/vcpkg.cmake")
     include_directories("C:/Program Files/vcpkg/installed/x64-windows/share")
-
     set(cpprestsdk_DIR "C:/Program Files/vcpkg/installed/x64-windows/share/cpprestsdk")
     set(ZLIB_LIBRARY "C:/Program Files/vcpkg/installed/x64-windows/lib/zlib.lib")
     set(ZLIB_INCLUDE_DIR "C:/Program Files/vcpkg/installed/x64-windows/include/zlib.h")
@@ -20,12 +19,19 @@ if(WIN32)
     set(libpqxx_DIR "C:/Program Files/vcpkg/installed/x64-windows/share/libpqxx")
     set(ZLIB_DIR "C:/Program Files/vcpkg/installed/x64-windows/share/zlib")
 elseif(UNIX)
-    find_package(cpprestsdk REQUIRED)
-    find_package(libpqxx REQUIRED)
-    # Add other packages and directories as required
+    # Set the path to vcpkg CMake scripts
+    set(CMAKE_TOOLCHAIN_FILE "/opt/vcpkg/scripts/buildsystems/vcpkg.cmake")
+    include(${CMAKE_TOOLCHAIN_FILE})
+
+    # Include directories for installed libraries via vcpkg on Linux
+    include_directories("/opt/vcpkg/installed/x64-linux/include")
+    find_package(cpprestsdk CONFIG REQUIRED)
+    find_package(libpqxx CONFIG REQUIRED)
+    find_package(ZLIB REQUIRED)
 endif()
 
 # Find the packages installed via vcpkg or system libraries
+# These are now inside the condition to ensure they are available and set properly
 find_package(cpprestsdk CONFIG REQUIRED)
 find_package(libpqxx CONFIG REQUIRED)
 
