@@ -17,27 +17,23 @@ while conn is None:
         sleep(1)
 
 
-print(10000*"_")
-
-# Créer un objet curseur
-cur = conn.cursor()
+print(1000*"_")
 
 
-def inserer(valeurs):
-    # Définir la requête SQL pour insérer une ligne dans la table
-    query = "INSERT INTO SensorsData () VALUES (%s, %s, %s, %s, %s, %s, %s)"
+def inserer(donnees):
+    with conn.cursor() as cur:
+        # Définir la requête SQL pour insérer une ligne dans la table        
+        query = f"INSERT INTO SensorsData ({', '.join(donnees.keys())}) VALUES ({', '.join(map(repr, donnees.values()))})"
     
-    # Exécuter la requête SQL
-    cur.execute(query, valeurs)
-    print("Ligne insérée dans la table")
+        print(query)
+    
+        # Exécuter la requête SQL
+        cur.execute(query)
 
-def terminer_insertions():
-    # Valider la transaction
-    conn.commit()
+        # Valider la transaction
+        conn.commit()
 
-    # Fermer le curseur et la connexion
-    cur.close()
-    conn.close()
+        print("Ligne insérée dans la table")
 
 
 """#!!! Test !!!

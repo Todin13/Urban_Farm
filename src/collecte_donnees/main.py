@@ -11,20 +11,28 @@ def receive_data():
     try:
         data = {key.decode("utf-8") if isinstance(key, bytes) else key: value.decode("utf-8") if isinstance(value, bytes) else value
         	for key, value in unpackb(b64decode(request.data)).items()}
+        keys = data.keys()
+        if "sensor_id" in keys:
+            data["Sensor_ID"] = data.pop("sensor_id")
+        if "sensor_version" in keys:
+            data["Sensor_Version"] = data.pop("sensor_version")
+        if "plant_id" in keys:
+            data["Plant_ID"] = data.pop("plant_id")
+        if "time" in keys:
+            data["Time"] = data.pop("time")
         if "measures" in data:
             measures = {key.decode("utf-8") if isinstance(key, bytes) else key: value.decode("utf-8") if isinstance(value, bytes) else value
             		for key, value in data.pop("measures").items()}
             if "temperature" in measures.keys():
-            	data["temperature"] = measures["temperature"]
+            	data["Temperature"] = measures["temperature"][:-2]
             if "humidite" in measures.keys():
-            	data["humidite"] = measures["humidite"]
+            	data["Humidity"] = measures["humidite"]
             elif "humidity" in measures.keys():
-            	data["humidite"] = measures["humidity"]
+            	data["Humidity"] = measures["humidity"]
         print("Données reçues : ", data)
-        
+        inserer(data)
         return data
-    except:
-        print(data)
+    except ZeroDivisionError:
         print("Les données reçues ne sont pas utilisables.")
         return {}
 
