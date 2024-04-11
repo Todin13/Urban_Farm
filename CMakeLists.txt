@@ -5,20 +5,27 @@ project(UrbanFarm) # Replace with your actual project name
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Include directories if there are specific subdirectories for headers
+# Include directories for header files
 include_directories(${CMAKE_SOURCE_DIR})
-include("C:/Program Files/vcpkg/scripts/buildsystems/vcpkg.cmake")
-include_directories("C:/Program Files/vcpkg/installed/x64-windows/share")
 
-# Find the packages installed via vcpkg
-set(cpprestsdk_DIR "C:/Program Files/vcpkg/installed/x64-windows/share/cpprestsdk")
-set(ZLIB_LIBRARY "C:/Program Files/vcpkg/installed/x64-windows/lib/zlib.lib")
-set(ZLIB_INCLUDE_DIR "C:/Program Files/vcpkg/installed/x64-windows/include/zlib.h")
-set(unofficial-brotli_DIR "C:/Program Files/vcpkg/installed/x64-windows/share/unofficial-brotli")
-set(libpqxx_DIR "C:/Program Files/vcpkg/installed/x64-windows/share/libpqxx")
-set(ZLIB_DIR "C:/Program Files/vcpkg/installed/x64-windows/share/zlib")
+# Adjust paths based on the operating system
+if(WIN32)
+    include("C:/Program Files/vcpkg/scripts/buildsystems/vcpkg.cmake")
+    include_directories("C:/Program Files/vcpkg/installed/x64-windows/share")
 
+    set(cpprestsdk_DIR "C:/Program Files/vcpkg/installed/x64-windows/share/cpprestsdk")
+    set(ZLIB_LIBRARY "C:/Program Files/vcpkg/installed/x64-windows/lib/zlib.lib")
+    set(ZLIB_INCLUDE_DIR "C:/Program Files/vcpkg/installed/x64-windows/include/zlib.h")
+    set(unofficial-brotli_DIR "C:/Program Files/vcpkg/installed/x64-windows/share/unofficial-brotli")
+    set(libpqxx_DIR "C:/Program Files/vcpkg/installed/x64-windows/share/libpqxx")
+    set(ZLIB_DIR "C:/Program Files/vcpkg/installed/x64-windows/share/zlib")
+elseif(UNIX)
+    find_package(cpprestsdk REQUIRED)
+    find_package(libpqxx REQUIRED)
+    # Add other packages and directories as required
+endif()
 
+# Find the packages installed via vcpkg or system libraries
 find_package(cpprestsdk CONFIG REQUIRED)
 find_package(libpqxx CONFIG REQUIRED)
 
@@ -34,7 +41,7 @@ add_executable(${PROJECT_NAME}
     # Add any other cpp files here
 )
 
-# Link against the libraries from vcpkg
+# Link against the libraries
 target_link_libraries(${PROJECT_NAME}
     PRIVATE cpprestsdk::cpprest
     PRIVATE libpqxx::pqxx

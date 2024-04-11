@@ -40,3 +40,7 @@ CREATE TABLE SensorsData (
     Humidity FLOAT,
     FOREIGN KEY (Sensor_ID) REFERENCES Sensors(ID)
 );
+
+-- Add the Processed column to an existing SensorsData table
+ALTER TABLE SensorsData
+ADD Processed BOOLEAN DEFAULT FALSE;
