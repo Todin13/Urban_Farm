@@ -81,11 +81,6 @@ services:
       PGADMIN_DEFAULT_PASSWORD: "admin"
     ports:
       - "80:80"
-<<<<<<< HEAD
-    depends_on:
-      - database
-    restart: unless-stopped  # This line should be indented to be part of the pgadmin service
-=======
     depends_on:
       - database
     restart: unless-stopped  # This line should be indented to be part of the pgadmin service
@@ -98,7 +93,6 @@ services:
       - 8080:8080
     depends_on:
       - database
->>>>>>> Lapin
-
+      
 volumes:
   db-data:
