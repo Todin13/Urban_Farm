@@ -24,31 +24,31 @@ services:
     environment:
       - SERVER_URL=http://localhost:8080/receive
       - SCENARIO_ID=4
-  sensor5:
+  sensor5: # sometimes send ICA= in place of mgspack
     image: abelfodil/sensor:0.0.1
     network_mode: "host"
     environment:
       - SERVER_URL=http://localhost:8080/receive
       - SCENARIO_ID=5
-  sensor6:
+  sensor6: # only send humidity on plant4
     image: abelfodil/sensor:0.0.1
     network_mode: "host"
     environment:
       - SERVER_URL=http://localhost:8080/receive
       - SCENARIO_ID=6
-  sensor7:
+  sensor7: # only send temperature on plant 5 with -500°F equivalent of -295.555°C
     image: abelfodil/sensor:0.0.1
     network_mode: "host"
     environment:
       - SERVER_URL=http://localhost:8080/receive
       - SCENARIO_ID=7
-  sensor8:
+  sensor8: #temperature et degres ne bouge pas 10°C et 12% on plant 6
     image: abelfodil/sensor:0.0.1
     network_mode: "host"
     environment:
       - SERVER_URL=http://localhost:8080/receive
       - SCENARIO_ID=8
-  sensorCustom:
+  sensorCustom: # alterne humidité et temperature
     image: abelfodil/sensor:0.0.1
     network_mode: "host"
     environment:
@@ -70,7 +70,7 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./src/database/init.sql:/docker-entrypoint-initdb.d/init.sql
-    restart: unless-stopped  # This line should be indented to be part of the database service
+    restart: unless-stopped  
 
   pgadmin:
     image: dpage/pgadmin4
@@ -81,7 +81,25 @@ services:
       - "80:80"
     depends_on:
       - database
-    restart: unless-stopped  # This line should be indented to be part of the pgadmin service
+    restart: unless-stopped  
 
+  collecte_donnees:
+    build:
+      context: src/collecte_donnees
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+    environment:
+      - DB_HOST=database
+      - DB_PORT=5432
+      - DB_NAME=urbanfarm
+      - DB_USER=admin
+      - DB_PASSWORD=urbanfarm123
+      - API_PATH=/your-api-path
+      - API_HOST=0.0.0.0
+      - API_PORT=8080
+      
 volumes:
   db-data:

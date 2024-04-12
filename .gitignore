@@ -6,6 +6,7 @@
 *.lo
 *.o
 *.obj
+*.lock
 
 # Precompiled Headers
 *.gch
@@ -34,3 +35,12 @@
 # Misc
 .gpteng
 prompt
+
+# cache
+__pycache__
+
+# build
+build
+
+# env
+.venv
