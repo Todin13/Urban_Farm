@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: sensor7
+  name: sensor7
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: sensor7
+  template:
+    metadata:
+      labels:
+        io.kompose.network/urban-farm-default: "true"
+        io.kompose.service: sensor7
+    spec:
+      containers:
+        - env:
+            - name: SCENARIO_ID
+              value: "7"
+            - name: SERVER_URL
+              value: http://localhost:8080/receive
+          image: abelfodil/sensor:0.0.1
+          name: sensor7
+      restartPolicy: Always

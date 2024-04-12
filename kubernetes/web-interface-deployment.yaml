@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: web-interface
+  name: web-interface
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: web-interface
+  template:
+    metadata:
+      labels:
+        io.kompose.network/urban-farm-default: "true"
+        io.kompose.service: web-interface
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: urbanfarm
+            - name: POSTGRES_HOST
+              value: database
+            - name: POSTGRES_PASSWORD
+              value: urbanfarm123
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              value: admin
+          image: web-interface
+          name: web-interface
+          ports:
+            - containerPort: 8501
+              protocol: TCP
+      restartPolicy: Always
