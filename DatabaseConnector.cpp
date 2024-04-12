@@ -5,6 +5,9 @@
 #include <iomanip>
 #include <ctime>
 #include <chrono>
+#include "MetricsCollector.h"
+
+MetricsCollector metrics;
 
 DatabaseConnector::DatabaseConnector(const std::string& connectionString)
     : dbConnection(connectionString) {
@@ -84,15 +87,19 @@ void DatabaseConnector::fetchAndAnalyzeData(pqxx::work& txn) {
         AnomalyDetector anomalyDetector(*this);  // Pass current instance to the constructor
 
         for (auto row : r) {
+            metrics.incrementProcessed();  // Increment the count of processed records
             int sensorID = row["sensor_id"].as<int>();
 
             // Check for null values in temperature or humidity before proceeding
             if (row["temperature"].is_null() || row["humidity"].is_null()) {
+                metrics.incrementSkipped();  // Increment the count of skipped records
                 std::string nullFields;
                 if (row["temperature"].is_null()) {
+                    metrics.incrementSkipped();  // Increment the count of skipped records
                     nullFields += "temperature, ";
                 }
                 if (row["humidity"].is_null()) {
+                    metrics.incrementSkipped();  // Increment the count of skipped records
                     nullFields += "humidity, ";
                 }
                 nullFields = nullFields.substr(0, nullFields.size() - 2);  // Remove the last comma and space
@@ -117,10 +124,12 @@ void DatabaseConnector::fetchAndAnalyzeData(pqxx::work& txn) {
 
             // Use the AnomalyDetector to check if the rate of change is anomalous
             if (anomalyDetector.isRateOfChangeAnomalous(currentData, previousData, txn)) {
+                metrics.incrementAnomalies();  // Increment the count of detected anomalies
                 std::cout << "Anomalous rate of change detected for sensor ID: " << currentData.sensorID << std::endl;
                 // Optionally, take further actions like logging the anomaly or alerting
             }
             else if (anomalyDetector.isAnomalous(currentData, txn)) {
+                metrics.incrementAnomalies();  // Increment the count of detected anomalies
                 std::cout << "Anomaly detected for sensor ID: " << currentData.sensorID << std::endl;
                 // Optionally, take further actions like logging the anomaly or alerting
             }
@@ -133,6 +142,7 @@ void DatabaseConnector::fetchAndAnalyzeData(pqxx::work& txn) {
         }
 
         txn.commit(); // Only commit if everything in the loop has executed without throwing an exception
+        metrics.logMetrics();  // Log metrics after processing all records
     } catch (const std::exception& e) {
         std::cerr << "Error during fetch and analyze: " << e.what() << std::endl;
         txn.abort(); // Rollback the transaction in case of an error
