@@ -6,7 +6,6 @@ import logging
 from insertion_donnees import *
 
 data_collection = Flask(__name__)
-
 @data_collection.route(os.getenv("API_PATH"), methods=['POST'])
 def receive_data():
     try:
