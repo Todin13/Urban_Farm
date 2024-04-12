@@ -5,10 +5,31 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <cstdlib>  // For getenv()
+
+std::string getEnvVar(const std::string &key, const std::string &defaultValue) {
+    const char* val = getenv(key.c_str());
+    if (val == nullptr) {  // Variable not found
+        return defaultValue;
+    }
+    return std::string(val);
+}
 
 int main() {
     // Initialize the database connector
-    const std::string connectionString = "host=localhost port=5433 dbname=urbanfarm user=admin password=urbanfarm123";
+    std::string host = getEnvVar("DB_HOST", "localhost");
+    std::string port = getEnvVar("DB_PORT", "5433");
+    std::string dbname = getEnvVar("DB_NAME", "urbanfarm");
+    std::string user = getEnvVar("DB_USER", "admin");
+    std::string password = getEnvVar("DB_PASSWORD", "urbanfarm123");
+
+    std::string connectionString = "host=" + host +
+                                   " port=" + port +
+                                   " dbname=" + dbname +
+                                   " user=" + user +
+                                   " password=" + password;
+
+    std::cout << "Connection String: " << connectionString << std::endl;
     DatabaseConnector dbConnector(connectionString);
     dbConnector.testQuery();
     dbConnector.fetchSensorData();

@@ -3,7 +3,7 @@ set(CMAKE_HOST_SYSTEM_NAME "Linux")
 set(CMAKE_HOST_SYSTEM_VERSION "6.5.0-27-generic")
 set(CMAKE_HOST_SYSTEM_PROCESSOR "x86_64")
 
-include("/home/mohamad/Programming/vcpkg/scripts/buildsystems/vcpkg.cmake")
+include("/home/mohamad/opt/vcpkg/scripts/buildsystems/vcpkg.cmake")
 
 set(CMAKE_SYSTEM "Linux-6.5.0-27-generic")
 set(CMAKE_SYSTEM_NAME "Linux")

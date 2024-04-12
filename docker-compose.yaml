@@ -62,10 +62,10 @@ services:
   urbanfarm:
     image: warnex/urbanfarm_0.1
     ports:
-      - "8080:8080"
+      - "8090:8090"
     environment:
       - DB_HOST=database
-      - DB_PORT=5433
+      - DB_PORT=5432
       - DB_NAME=urbanfarm
       - DB_USER=admin
       - DB_PASS=urbanfarm123

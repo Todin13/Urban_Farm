@@ -20,8 +20,18 @@ if(WIN32)
     set(ZLIB_DIR "C:/Program Files/vcpkg/installed/x64-windows/share/zlib")
 elseif(UNIX)
     # Set the path to vcpkg CMake scripts
-    set(CMAKE_TOOLCHAIN_FILE "/opt/vcpkg/scripts/buildsystems/vcpkg.cmake")
     include(${CMAKE_TOOLCHAIN_FILE})
+    set(CMAKE_TOOLCHAIN_FILE "~/opt/vcpkg/scripts/buildsystems/vcpkg.cmake")
+    set(cpprestsdk_DIR "~/opt/vcpkg/installed/x64-linux/share/cpprestsdk")
+    set(boost_random_DIR "~/opt/vcpkg/installed/x64-linux/share/boost-random")
+    set(libpqxx_DIR "~/opt/vcpkg/installed/x64-linux/share/libpqxx")
+    
+    # Set the PostgreSQL library and include directory
+    set(PostgreSQL_LIBRARY "~/opt/vcpkg/installed/x64-linux/lib/libpq.so")  # Adjust if necessary
+    set(PostgreSQL_INCLUDE_DIR "~/opt/vcpkg/installed/x64-linux/include")  # Adjust if necessary
+
+    # Now find the package
+    find_package(PostgreSQL REQUIRED)
 
     # Include directories for installed libraries via vcpkg on Linux
     include_directories("/opt/vcpkg/installed/x64-linux/include")

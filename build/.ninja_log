@@ -1,0 +1,9 @@
+# ninja log v5
+1	21	1712885580607133046	CMakeFiles/UrbanFarm.dir/MetricsCollector.cpp.o	68a259cc4fee7be3
+1	1183	1712885581771131075	CMakeFiles/UrbanFarm.dir/JsonSerializer.cpp.o	6fde0939f66fbe55
+0	1477	1712885582063130586	CMakeFiles/UrbanFarm.dir/AnomalyDetector.cpp.o	7436f89834a3a920
+0	1569	1712885582155130435	CMakeFiles/UrbanFarm.dir/DatabaseConnector.cpp.o	16761cb1924db190
+0	3424	1712885584007127436	CMakeFiles/UrbanFarm.dir/main.cpp.o	304f56645fa66c70
+1	4299	1712885584883126067	CMakeFiles/UrbanFarm.dir/RestServer.cpp.o	ab39fd788f60017c
+2	4847	1712885585427125234	CMakeFiles/UrbanFarm.dir/WarningReporter.cpp.o	1a04267dfecb31ac
+4847	6364	1712885586939122966	UrbanFarm	a3ab477d21d11d14
