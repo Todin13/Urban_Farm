@@ -33,7 +33,7 @@ spec:
               value: "5432"
             - name: DB_USER
               value: admin
-          image: collecte-donnees
+          image: todin13/api-data-collection:0.1.0
           name: collecte-donnees
           ports:
             - containerPort: 8080

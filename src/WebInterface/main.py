@@ -64,7 +64,7 @@ def display_dashboard_overview(cursor):
         cursor.execute("SELECT COUNT(*) FROM Sensors;")
         total_sensors = cursor.fetchone()[0]
         cursor.execute(
-            "SELECT COUNT(*) FROM SensorsData WHERE Time > now() - interval '1 minute';"
+            "SELECT COUNT(DISTINCT Sensor_ID) FROM SensorsData WHERE Time > now() - interval '1 min';"
         )
         sensors_online = cursor.fetchone()[0]
 
