@@ -10,7 +10,7 @@ prepare:
 	poetry install --no-root
 
 run:
-	@echo Starting the app"
+	@echo "Starting the app"
 	poetry run streamlit run main.py
 
 check:
