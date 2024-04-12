@@ -41,6 +41,7 @@ __pycache__
 
 # build
 build
+*.lock
 
 # env
 .venv
