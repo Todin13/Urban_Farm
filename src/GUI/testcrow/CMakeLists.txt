@@ -4,5 +4,7 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(UrbanFarmGUIWeb main.cpp)
 
 add_subdirectory(../../../libs/libpqxx-7.9.0 build-pqxx)
+add_subdirectory(../../../libs/jsoncpp-1.9.5 build-jsoncpp)
 target_link_libraries(UrbanFarmGUIWeb PRIVATE pqxx)
-target_include_directories(my_project PRIVATE ../../../include)
+target_link_libraries(UrbanFarmGUIWeb PRIVATE jsoncpp_lib)
+target_include_directories(UrbanFarmGUIWeb PRIVATE ../../../include)

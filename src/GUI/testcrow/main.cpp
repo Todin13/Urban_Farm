@@ -1,30 +1,60 @@
-#include "crow.h"
 #include <iostream>
 #include <pqxx/pqxx>
+#include "crow.h"
+#include <sstream>
+#include <json/json.h>
+#include <iterator>
 
 // Function prototype declaration
 std::string getDashboardOverview();
 
 // Function to query the database and retrieve dashboard overview data
 std::string getDashboardOverview() {
-    std::string metrics;
+    std::stringstream response;
 
     try {
         pqxx::connection conn("dbname=urbanfarm user=admin password=urbanfarm123 hostaddr=127.0.0.1 port=5433");
         pqxx::work txn(conn);
 
-        // Example query to retrieve dashboard metrics
-        pqxx::result result = txn.exec("SELECT * FROM DashboardMetrics");
+        pqxx::result result = txn.exec("SELECT COUNT(*) AS experiment_count FROM Experiment;"
+                                        "SELECT COUNT(*) AS sensor_count FROM Sensors;"
+                                        "SELECT COUNT(*) AS warning_count FROM Warnings;"
+                                        "SELECT AVG(Temperature) AS avg_temperature, AVG(Humidity) AS avg_humidity FROM SensorsData;");
 
-        for (const auto &row : result) {
-            // Assuming the structure of DashboardMetrics table, adjust accordingly
-            metrics += "<li>" + row["MetricName"].as<std::string>() + ": " + row["MetricValue"].as<std::string>() + "</li>";
+        int experiment_count = result[0][0].as<int>();
+        int sensor_count = result[1][0].as<int>();
+        int warning_count = result[2][0].as<int>();
+        float avg_temperature = 0.0f;
+        float avg_humidity = 0.0f;
+
+        /for (auto field = std::begin(result[3][0]); field != std::end(result[3][0]); ++field) {
+            // Check field name and extract value if it matches
+            std::string field_name = field.name();
+            if (field_name == "avg_temperature") {
+                avg_temperature = field.as<float>();
+            } else if (field_name == "avg_humidity") {
+                avg_humidity = field.as<float>();
+            }
         }
+
+
+        // Build JSON response
+        Json::Value data;
+        data["experiment_count"] = experiment_count;
+        data["sensor_count"] = sensor_count;
+        data["warning_count"] = warning_count;
+        data["avg_temperature"] = avg_temperature;
+        data["avg_humidity"] = avg_humidity;
+
+        // Convert JSON to string
+        Json::StreamWriterBuilder builder;
+        response << Json::writeString(builder, data);
     } catch (const std::exception &e) {
         std::cerr << "Error fetching dashboard data: " << e.what() << std::endl;
+        response << "{}";
     }
 
-    return metrics;
+    return response.str();
 }
 
 int main() {
@@ -33,24 +63,76 @@ int main() {
     // Route for the home page
     CROW_ROUTE(app, "/")([](){
         std::string dashboardOverview = getDashboardOverview();
-        
         return R"(
             <!DOCTYPE html>
             <html lang="en">
             <head>
-                <!-- Meta tags and CSS styles -->
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Urban Farm Monitoring</title>
+                <style>
+                    /* CSS styles for layout */
+                    body {
+                        font-family: Arial, sans-serif;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    header {
+                        background-color: #333;
+                        color: #fff;
+                        text-align: center;
+                        padding: 10px 0;
+                    }
+                    nav {
+                        background-color: #f4f4f4;
+                        padding: 10px;
+                    }
+                    nav ul {
+                        list-style-type: none;
+                        margin: 0;
+                        padding: 0;
+                        text-align: center;
+                    }
+                    nav ul li {
+                        display: inline;
+                        margin-right: 10px;
+                    }
+                    section {
+                        padding: 20px;
+                    }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+                    table, th, td {
+                        border: 1px solid #ddd;
+                        padding: 8px;
+                        text-align: left;
+                    }
+                    th {
+                        background-color: #f2f2f2;
+                    }
+                </style>
             </head>
             <body>
                 <header>
-                    <!-- Header content -->
+                    <h1>Urban Farm Monitoring</h1>
                 </header>
                 <nav>
-                    <!-- Navigation links -->
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/sensors">Sensors</a></li>
+                        <li><a href="/data">Data Analysis</a></li>
+                        <li><a href="/alarms">Alarms</a></li>
+                        <li><a href="/settings">Settings</a></li>
+                    </ul>
                 </nav>
                 <section>
+                    <section>
                     <h1>Urban Farm Monitoring</h1>
                     <h2>Dashboard Overview</h2>
                     <ul>)" + dashboardOverview + R"(</ul>
+                </section>
                 </section>
             </body>
             </html>
