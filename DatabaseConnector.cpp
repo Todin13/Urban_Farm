@@ -84,15 +84,28 @@ void DatabaseConnector::fetchAndAnalyzeData(pqxx::work& txn) {
         AnomalyDetector anomalyDetector(*this);  // Pass current instance to the constructor
 
         for (auto row : r) {
+            int sensorID = row["sensor_id"].as<int>();
+
             // Check for null values in temperature or humidity before proceeding
             if (row["temperature"].is_null() || row["humidity"].is_null()) {
-                std::cout << "Skipping sensor ID " << row["sensor_id"].as<int>() << " due to null values." << std::endl;
-                continue;  // Skip this iteration if temperature or humidity is null
+                std::string nullFields;
+                if (row["temperature"].is_null()) {
+                    nullFields += "temperature, ";
+                }
+                if (row["humidity"].is_null()) {
+                    nullFields += "humidity, ";
+                }
+                nullFields = nullFields.substr(0, nullFields.size() - 2);  // Remove the last comma and space
+
+                std::string warningMessage = "Null values detected for " + nullFields + " in sensor ID " + std::to_string(sensorID);
+                std::cout << warningMessage << std::endl;
+                insertWarning(txn, sensorID, warningMessage);
+                continue;  // Skip further processing for this sensor data
             }
 
             // Construct a SensorData object from the row
             SensorData currentData;
-            currentData.sensorID = row["sensor_id"].as<int>();
+            currentData.sensorID = sensorID;
             currentData.sensorVersion = row["sensor_version"].as<std::string>();
             currentData.plantID = row["plant_id"].as<int>();
             currentData.temperature = row["temperature"].as<float>();
@@ -125,6 +138,7 @@ void DatabaseConnector::fetchAndAnalyzeData(pqxx::work& txn) {
         txn.abort(); // Rollback the transaction in case of an error
     }
 }
+
 
 
 
