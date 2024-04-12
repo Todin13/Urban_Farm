@@ -1,5 +1,5 @@
 # Définir l'image de base
-FROM python:3.12.2
+FROM python:3.12.2-slim
 
 # Définir le répertoire de travail dans le conteneur
 WORKDIR /
