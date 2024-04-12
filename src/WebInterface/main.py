@@ -211,6 +211,7 @@ def display_sensor_section(cursor):
                     "Time",
                     "Temperature",
                     "Humidity",
+                    "Processed"
                 ],
             )
             st.dataframe(sensor_data_df)
