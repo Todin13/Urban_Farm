@@ -12,7 +12,7 @@ CREATE TABLE Sensors (
 
 -- Create the Experiment Data table
 CREATE TABLE ExperimentData (
-    ID SERIAL PRIMARY KEY,
+    ID INT PRIMARY KEY,
     Sensor_ID INT,
     Experiment_ID INT,
     FOREIGN KEY (Sensor_ID) REFERENCES Sensors(ID),
@@ -21,7 +21,7 @@ CREATE TABLE ExperimentData (
 
 -- Create the Warnings table
 CREATE TABLE Warnings (
-    ID SERIAL PRIMARY KEY,
+    ID INT PRIMARY KEY,
     Sensor_ID INT,
     Experiment_ID INT,
     Type VARCHAR(255),
@@ -31,7 +31,7 @@ CREATE TABLE Warnings (
 
 -- Create the Sensors Data table
 CREATE TABLE SensorsData (
-    ID SERIAL PRIMARY KEY,
+    ID INT PRIMARY KEY,
     Sensor_ID INT,
     Sensor_Version VARCHAR(255),
     Plant_ID INT,

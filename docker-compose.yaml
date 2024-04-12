@@ -6,93 +6,91 @@ services:
     environment:
       - SERVER_URL=http://localhost:8080/receive
       - SCENARIO_ID=1
-#   sensor2:
-#     image: abelfodil/sensor:0.0.1
-#     network_mode: "host"
-#     environment:
-#       - SERVER_URL=http://localhost:8080/receive
-#       - SCENARIO_ID=2
-#   sensor3:
-#     image: abelfodil/sensor:0.0.1
-#     network_mode: "host"
-#     environment:
-#       - SERVER_URL=http://localhost:8080/receive
-#       - SCENARIO_ID=3
-#   sensor4:
-#     image: abelfodil/sensor:0.0.1
-#     network_mode: "host"
-#     environment:
-#       - SERVER_URL=http://localhost:8080/receive
-#       - SCENARIO_ID=4
-#   sensor5:
-#     image: abelfodil/sensor:0.0.1
-#     network_mode: "host"
-#     environment:
-#       - SERVER_URL=http://localhost:8080/receive
-#       - SCENARIO_ID=5
-#   sensor6:
-#     image: abelfodil/sensor:0.0.1
-#     network_mode: "host"
-#     environment:
-#       - SERVER_URL=http://localhost:8080/receive
-#       - SCENARIO_ID=6
-#   sensor7:
-#     image: abelfodil/sensor:0.0.1
-#     network_mode: "host"
-#     environment:
-#       - SERVER_URL=http://localhost:8080/receive
-#       - SCENARIO_ID=7
-#   sensor8:
-#     image: abelfodil/sensor:0.0.1
-#     network_mode: "host"
-#     environment:
-#       - SERVER_URL=http://localhost:8080/receive
-#       - SCENARIO_ID=8
-#   sensorCustom:
-#     image: abelfodil/sensor:0.0.1
-#     network_mode: "host"
-#     environment:
-#       - SERVER_URL=http://localhost:8080/receive
-#       - PLANT_ID=12
-#       - SENSOR_ID=88712531
-#       - SENSOR_VERSION=FR-v7
-#       - PERIOD=2s
-#       - MEASURES=temperature:285.15°K,temperature:286.15°K,humidity:12%
-#     depends_on:
-#      - collecte_donnees
+  sensor2:
+    image: abelfodil/sensor:0.0.1
+    network_mode: "host"
+    environment:
+      - SERVER_URL=http://localhost:8080/receive
+      - SCENARIO_ID=2
+  sensor3:
+    image: abelfodil/sensor:0.0.1
+    network_mode: "host"
+    environment:
+      - SERVER_URL=http://localhost:8080/receive
+      - SCENARIO_ID=3
+  sensor4:
+    image: abelfodil/sensor:0.0.1
+    network_mode: "host"
+    environment:
+      - SERVER_URL=http://localhost:8080/receive
+      - SCENARIO_ID=4
+  sensor5: # sometimes send ICA= in place of mgspack
+    image: abelfodil/sensor:0.0.1
+    network_mode: "host"
+    environment:
+      - SERVER_URL=http://localhost:8080/receive
+      - SCENARIO_ID=5
+  sensor6: # only send humidity on plant4
+    image: abelfodil/sensor:0.0.1
+    network_mode: "host"
+    environment:
+      - SERVER_URL=http://localhost:8080/receive
+      - SCENARIO_ID=6
+  sensor7: # only sen temperature on plant 5 with -500°F equivalent of -295.555°C
+    image: abelfodil/sensor:0.0.1
+    network_mode: "host"
+    environment:
+      - SERVER_URL=http://localhost:8080/receive
+      - SCENARIO_ID=7
+  sensor8: #temperature et degres ne bouge pas 10°C et 12% on plant 6
+    image: abelfodil/sensor:0.0.1
+    network_mode: "host"
+    environment:
+      - SERVER_URL=http://localhost:8080/receive
+      - SCENARIO_ID=8
+  sensorCustom: # alterne humidité et temperature
+    image: abelfodil/sensor:0.0.1
+    network_mode: "host"
+    environment:
+      - SERVER_URL=http://localhost:8080/receive
+      - PLANT_ID=12
+      - SENSOR_ID=88712531
+      - SENSOR_VERSION=FR-v7
+      - PERIOD=2s
+      - MEASURES=temperature:285.15°K,temperature:286.15°K,humidity:12%
 
-#   database:
-#     image: postgres:latest
-#     ports:
-#       - "5433:5432"
-#     environment:
-#       POSTGRES_DB: urbanfarm
-#       POSTGRES_USER: admin
-#       POSTGRES_PASSWORD: urbanfarm123
-#     volumes:
-#       - db-data:/var/lib/postgresql/data
-#       - ./src/database/init.sql:/docker-entrypoint-initdb.d/init.sql
-#     restart: unless-stopped  # This line should be indented to be part of the database service
+  database:
+    image: postgres:latest
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: urbanfarm
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: urbanfarm123
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./src/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped  
 
-#   pgadmin:
-#     image: dpage/pgadmin4
-#     environment:
-#       PGADMIN_DEFAULT_EMAIL: "pgadmin@example.com"
-#       PGADMIN_DEFAULT_PASSWORD: "admin"
-#     ports:
-#       - "80:80"
-#     depends_on:
-#       - database
-#     restart: unless-stopped  # This line should be indented to be part of the pgadmin service
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "pgadmin@example.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "80:80"
+    depends_on:
+      - database
+    restart: unless-stopped  
 
-#   collecte_donnees:
-#     build:
-#       context: src/collecte_donnees
-#       dockerfile: Dockerfile
-#     ports:
-#       - 8080:8080
-#     depends_on:
-#       - database
+  collecte_donnees:
+    build:
+      context: src/collecte_donnees
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
       
-# volumes:
-#   db-data:
+volumes:
+  db-data:
