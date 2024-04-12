@@ -1,17 +1,28 @@
+import os
 import psycopg2
+from dotenv import load_dotenv
 from time import sleep
 
+# Load environment variables from .env file
+load_dotenv()
+
+# Get database connection parameters from environment variables
+db_host = os.getenv("DB_HOST")
+db_port = os.getenv("DB_PORT")
+db_name = os.getenv("DB_NAME")
+db_user = os.getenv("DB_USER")
+db_password = os.getenv("DB_PASSWORD")
 
 # Établir une connexion à la base de données
 conn = None
 while conn is None:
     try:
         conn = psycopg2.connect(
-            host="database",
-            port=5432,
-            dbname="urbanfarm",
-            user="admin",
-            password="urbanfarm123"
+            host=db_host,
+            port=db_port,
+            dbname=db_name,
+            user=db_user,
+            password=db_password
         )
     except psycopg2.OperationalError:
         sleep(1)

@@ -1,12 +1,13 @@
 from flask import Flask, request, jsonify
 from msgpack import unpackb
 from base64 import b64decode
+import os
 import logging
 from insertion_donnees import *
 
 data_collection = Flask(__name__)
 
-@data_collection.route('/receive', methods=['POST'])
+@data_collection.route(os.getenv("API_PATH"), methods=['POST'])
 def receive_data():
     try:
         data = request.data
@@ -65,4 +66,4 @@ def receive_data():
         return jsonify(message="An error occurred"), 500
 
 if __name__ == "__main__":
-    data_collection.run(host='0.0.0.0', port=8080)
+    data_collection.run(host=os.getenv("API_HOST"), port=os.getenv("API_PORT"))
