@@ -1,11 +1,11 @@
 version: '3.8'
 services:
-  sensor1:
-    image: abelfodil/sensor:0.0.1
-    network_mode: "host"
-    environment:
-      - SERVER_URL=http://localhost:8080/receive
-      - SCENARIO_ID=1
+  # sensor1:
+  #   image: abelfodil/sensor:0.0.1
+  #   network_mode: "host"
+  #   environment:
+  #     - SERVER_URL=http://localhost:8080/receive
+  #     - SCENARIO_ID=1
   # sensor2:
   #   image: abelfodil/sensor:0.0.1
   #   network_mode: "host"
@@ -58,6 +58,21 @@ services:
   #     - SENSOR_VERSION=FR-v7
   #     - PERIOD=2s
   #     - MEASURES=temperature:285.15°K,temperature:286.15°K,humidity:12%
+ 
+  urbanfarm:
+    image: warnex/urbanfarm_0.1
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=database
+      - DB_PORT=5433
+      - DB_NAME=urbanfarm
+      - DB_USER=admin
+      - DB_PASS=urbanfarm123
+    depends_on:
+      - database
+    restart: unless-stopped
+    command: ["/bin/sh", "-c", "while true; do sleep 30; done"]  # Keep the container running
 
   database:
     image: postgres:latest
