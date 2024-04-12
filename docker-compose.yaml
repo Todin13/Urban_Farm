@@ -82,6 +82,8 @@ services:
     depends_on:
       - database
     restart: unless-stopped  
+    volumes:
+      - pgadmin:/var/lib/pgadmin
 
   collecte_donnees:
     build:
@@ -100,6 +102,22 @@ services:
       - API_PATH=/receive
       - API_HOST=0.0.0.0
       - API_PORT=8080
-      
+
+  web_interface:
+    build:
+      context: src/WebInterface
+      dockerfile: dockerfile
+    ports:
+      - 8501-8501
+    depends_on:
+      - database
+    environment:
+      - POSTGRES_HOST=database
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=urbanfarm
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=urbanfarm123
+            
 volumes:
   db-data:
+  pgadmin:

@@ -4,10 +4,16 @@ WORKDIR /app
 RUN mkdir data
 
 COPY main.py /app
-COPY requirement.txt /tmp/
-COPY data/spotify_top_songs_audio_features.csv data
+COPY requirements.txt /tmp/
 
-RUN pip install --no-cache-dir -r /tmp/requirement.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+# Set environment variables
+ENV POSTGRES_HOST=localhost
+ENV POSTGRES_PORT=5433
+ENV POSTGRES_DB=urbanfarm
+ENV POSTGRES_USER=admin
+ENV POSTGRES_PASSWORD=urbanfarm123
 
 EXPOSE 8501
 

@@ -5,4 +5,4 @@ numpy>=1.21.2
 seaborn>=0.13.2
 prometheus-client>=0.20.0
 streamlit-extras>=0.4.0
-psycopg2>=2.9.9
+psycopg2-binary>=2.9.9
