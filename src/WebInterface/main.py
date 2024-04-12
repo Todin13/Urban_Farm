@@ -4,7 +4,8 @@ import psycopg2
 import os
 import matplotlib.pyplot as plt
 import pandas as pd
-
+import seaborn as sns
+import seaborn as sns
 
 # Define the management of the app
 def manage_session_state():
@@ -86,16 +87,40 @@ def display_dashboard_overview(cursor):
         st.write(f"- Maximum Humidity: {max_humidity}%")
 
 
-    # Plot temperature and humidity evolution
-    st.subheader("Temperature and Humidity Evolution")
+    # Plot temperature evolution
+    # Calculate rolling mean, max, and min values for temperature and humidity
+    rolling_mean_temp = df["Temperature"].rolling(window=60).mean()
+    rolling_max_temp = df["Temperature"].rolling(window=60).max()
+    rolling_min_temp = df["Temperature"].rolling(window=60).min()
+
+    rolling_mean_humidity = df["Humidity"].rolling(window=60).mean()
+    rolling_max_humidity = df["Humidity"].rolling(window=60).max()
+    rolling_min_humidity = df["Humidity"].rolling(window=60).min()
+
+    # Plot temperature evolution
+    st.subheader("Temperature Evolution")
     fig, ax = plt.subplots(figsize=(10, 6))
-    ax.plot(df["Time"], df["Temperature"], label="Temperature", color="blue")
-    ax.plot(df["Time"], df["Humidity"], label="Humidity", color="green")
+    ax.plot(df["Time"], rolling_mean_temp, label="Mean Temperature", linestyle="--", color="orange")
+    ax.plot(df["Time"], rolling_max_temp, label="Max Temperature", linestyle="-.", color="red")
+    ax.plot(df["Time"], rolling_min_temp, label="Min Temperature", linestyle=":", color="green")
     ax.set_xlabel("Time")
-    ax.set_ylabel("Value")
-    ax.set_title("Temperature and Humidity Evolution")
+    ax.set_ylabel("Temperature")
+    ax.set_title("Temperature Evolution")
     ax.legend()
     st.pyplot(fig)
+
+    # Plot humidity evolution
+    st.subheader("Humidity Evolution")
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.plot(df["Time"], rolling_mean_humidity, label="Mean Humidity", linestyle="--", color="orange")
+    ax.plot(df["Time"], rolling_max_humidity, label="Max Humidity", linestyle="-.", color="red")
+    ax.plot(df["Time"], rolling_min_humidity, label="Min Humidity", linestyle=":", color="green")
+    ax.set_xlabel("Time")
+    ax.set_ylabel("Humidity")
+    ax.set_title("Humidity Evolution")
+    ax.legend()
+    st.pyplot(fig)
+
 
 # Function to fetch sensor data
 def fetch_sensor_data(cursor, sensor_id):
@@ -104,8 +129,8 @@ def fetch_sensor_data(cursor, sensor_id):
         data = cursor.fetchall()
         return data
     except psycopg2.Error as e:
-        st.error(f"Error fetching sensor data: {e}")
-        return None
+        return None        
+
 
 # Function to display sensor section
 def display_sensor_section(cursor):
@@ -133,15 +158,110 @@ def display_sensor_section(cursor):
             sensor_data_df = pd.DataFrame(sensor_data, columns=["ID", "Sensor_ID", "Sensor_Version", "PlantID", "Time", "Temperature", "Humidity"])
             st.dataframe(sensor_data_df)
 
+            # Plot temperature and humidity trends
+            st.subheader("Temperature and Humidity Trends")
+            fig, ax = plt.subplots(figsize=(10, 6))
+            ax.plot(sensor_data_df["Time"], sensor_data_df["Temperature"], label="Temperature", color="blue")
+            ax.plot(sensor_data_df["Time"], sensor_data_df["Humidity"], label="Humidity", color="green")
+            ax.set_xlabel("Time")
+            ax.set_ylabel("Value")
+            ax.set_title("Temperature and Humidity Trends")
+            ax.legend()
+            st.pyplot(fig)
+
+# Function to fetch data for data analysis
+def fetch_data_for_analysis(cursor, time_range, granularity, selected_sensors):
+    try:
+        selected_sensors_condition = ""
+        if selected_sensors:
+            selected_sensors_condition = " AND sensor_id NOT IN %s"
+        
+        if time_range == "Last 24 Hours":
+            cursor.execute("SELECT Time, Temperature, Humidity, sensor_id FROM SensorsData WHERE Time > now() - interval '24 hours'" + selected_sensors_condition + ";", (tuple(selected_sensors),))
+        elif time_range == "Last 7 Days":
+            cursor.execute("SELECT Time, Temperature, Humidity, sensor_id FROM SensorsData WHERE Time > now() - interval '7 days'" + selected_sensors_condition + ";", (tuple(selected_sensors),))
+        elif time_range == "Last 30 Days":
+            cursor.execute("SELECT Time, Temperature, Humidity, sensor_id FROM SensorsData WHERE Time > now() - interval '30 days'" + selected_sensors_condition + ";", (tuple(selected_sensors),))
+        elif time_range == "All Time" and selected_sensors:
+            cursor.execute("SELECT Time, Temperature, Humidity, sensor_id FROM SensorsData WHERE sensor_id NOT IN %s ;", (tuple(selected_sensors),))
+        elif time_range == "All Time":
+            cursor.execute("SELECT Time, Temperature, Humidity, sensor_id FROM SensorsData;", (tuple(selected_sensors),))
+        
+        data = cursor.fetchall()
+        
+        df = pd.DataFrame(data, columns=["Time", "Temperature", "Humidity", "SensorName"])
+        df["Time"] = pd.to_datetime(df["Time"])
+        if granularity == "Hourly":
+            df.set_index("Time", inplace=True)
+            df = df.resample('1h').mean()
+            df = df.reset_index()
+        elif granularity == "Daily":
+            df.set_index("Time", inplace=True)
+            df = df.resample('1D').mean()
+            df = df.reset_index()
+        elif granularity == "Minute":
+            df.set_index("Time", inplace=True)
+            df = df.resample('1T').mean()  # 1T stands for 1 minute
+            df = df.reset_index()
+        elif granularity == "5 Minutes":
+            df.set_index("Time", inplace=True)
+            df = df.resample('5T').mean()  # 5T stands for 5 minutes
+            df = df.reset_index()
+        return df
+    except psycopg2.Error as e:
+        st.error(f"Error fetching data for analysis: {e}")
+        return None
+
 # Function to display data analysis section
 def display_data_analysis_section(cursor):
     st.markdown("Data Analysis Section")
-    # Display data analysis options and graphs
+
+    # Time range selection
+    time_range = st.selectbox("Time Range:", ["Last 24 Hours", "Last 7 Days", "Last 30 Days", "All Time"])
+
+    # Granularity selection
+    granularity = st.selectbox("Granularity:", ["Hourly", "Daily", "Minute", "5 Minutes"])  # Added Minute and 5 Minutes
+
+    # Fetch available sensors
+    cursor.execute("SELECT DISTINCT Sensor_ID FROM SensorsData;")
+    sensors = cursor.fetchall()
+    sensors = [sensor[0] for sensor in sensors]
+
+    # Checkbox for selecting sensors to include
+    selected_sensors = st.multiselect("Select Sensors to Include:", sensors)
+
+    # Fetch data for analysis
+    df = fetch_data_for_analysis(cursor, time_range, granularity, selected_sensors)
+    if df is None:
+        return
+
+    # Display data
+    st.write("Data for Analysis:")
+    st.dataframe(df)
+
+    # Plot data
+    st.subheader("Data Visualization")
+    if st.checkbox("Show Temperature Trends"):
+        st.write("Temperature Trends")
+        plt.figure(figsize=(10, 6))
+        sns.lineplot(data=df, x="Time", y="Temperature")
+        plt.xlabel("Time")
+        plt.ylabel("Temperature")
+        plt.title("Temperature Trends")
+        st.pyplot()
+
+    if st.checkbox("Show Humidity Trends"):
+        st.write("Humidity Trends")
+        plt.figure(figsize=(10, 6))
+        sns.lineplot(data=df, x="Time", y="Humidity")
+        plt.xlabel("Time")
+        plt.ylabel("Humidity")
+        plt.title("Humidity Trends")
+        st.pyplot()
 
 # Function to display alarms section
 def display_alarms_section(cursor):
-    st.markdown("Alarms Section")
-    # Fetch and display active alarms from the database
+    pass
 
 # Main function
 def main():
