@@ -1,10 +1,6 @@
 import os
 import psycopg2
-from dotenv import load_dotenv
 from time import sleep
-
-# Load environment variables from .env file
-load_dotenv()
 
 # Get database connection parameters from environment variables
 db_host = os.getenv("DB_HOST")
