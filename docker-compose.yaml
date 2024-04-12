@@ -60,7 +60,7 @@ services:
   #     - MEASURES=temperature:285.15°K,temperature:286.15°K,humidity:12%
  
   urbanfarm:
-    image: warnex/urbanfarm_0.4
+    image: warnex/urbanfarm_0.8
     ports:
       - "8090:8090"
     environment:

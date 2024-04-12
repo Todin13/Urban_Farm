@@ -23,13 +23,27 @@ void RestServer::handleGet(web::http::http_request request) {
 }
 
 void RestServer::handlePost(web::http::http_request request) {
-    // Handle POST requests
     request.extract_json().then([this](web::json::value requestBody) {
-        SensorData sensorData = JsonSerializer::deserialize(requestBody);
-        AnomalyDetector anomalyDetector;
-        if (anomalyDetector.isAnomalous(sensorData)) {
-            WarningReporter::report(sensorData);
+        try {
+            // Start a transaction
+            pqxx::work txn(dbConnector.getConnection());
+
+            SensorData sensorData = JsonSerializer::deserialize(requestBody);
+            AnomalyDetector anomalyDetector(dbConnector);
+            
+            // Pass the transaction to the isAnomalous method
+            if (anomalyDetector.isAnomalous(sensorData, txn)) {
+                WarningReporter::report(sensorData);
+                txn.commit();  // Commit the transaction if no exceptions
+            } else {
+                txn.abort();  // Rollback if not anomalous or in case of other criteria
+            }
+        } catch (const std::exception& e) {
+            std::cerr << "Failed to analyze sensor data: " << e.what() << std::endl;
+            // Consider how to handle HTTP response in case of failure
         }
-    }).wait();
-    request.reply(web::http::status_codes::OK);
+    }).then([request]() {
+        // Always reply to the HTTP request
+        request.reply(web::http::status_codes::OK);
+    });
 }

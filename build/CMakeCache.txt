@@ -32,9 +32,6 @@ Boost_DATE_TIME_LIBRARY_DEBUG:FILEPATH=/home/mohamad/opt/vcpkg/installed/x64-lin
 //Boost date_time library (release)
 Boost_DATE_TIME_LIBRARY_RELEASE:FILEPATH=/home/mohamad/opt/vcpkg/installed/x64-linux/lib/libboost_date_time.a
 
-//The directory containing a CMake configuration file for Boost.
-Boost_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0
-
 //Boost filesystem library (debug)
 Boost_FILESYSTEM_LIBRARY_DEBUG:FILEPATH=/home/mohamad/opt/vcpkg/installed/x64-linux/lib/libboost_filesystem.a
 
@@ -42,7 +39,7 @@ Boost_FILESYSTEM_LIBRARY_DEBUG:FILEPATH=/home/mohamad/opt/vcpkg/installed/x64-li
 Boost_FILESYSTEM_LIBRARY_RELEASE:FILEPATH=/home/mohamad/opt/vcpkg/installed/x64-linux/lib/libboost_filesystem.a
 
 //Path to a file.
-Boost_INCLUDE_DIR:PATH=/home/mohamad/opt/vcpkg/installed/x64-linux/include
+Boost_INCLUDE_DIR:PATH=/usr/include
 
 //Boost library directory DEBUG
 Boost_LIBRARY_DIR_DEBUG:PATH=/home/mohamad/opt/vcpkg/installed/x64-linux/lib
@@ -83,11 +80,12 @@ CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
 //Path to a program.
 CMAKE_AR:FILEPATH=/usr/bin/ar
 
-//No help, variable specified on the command line.
-CMAKE_BUILD_TYPE:STRING=Debug
+//Choose the type of build, options are: None Debug Release RelWithDebInfo
+// MinSizeRel ...
+CMAKE_BUILD_TYPE:STRING=
 
-//No help, variable specified on the command line.
-CMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++
+//CXX compiler
+CMAKE_CXX_COMPILER:FILEPATH=/usr/bin/c++
 
 //A wrapper around 'ar' adding the appropriate '--plugin' option
 // for the GCC compiler
@@ -112,8 +110,8 @@ CMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
 //Flags used by the CXX compiler during RELWITHDEBINFO builds.
 CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 
-//No help, variable specified on the command line.
-CMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc
+//C compiler
+CMAKE_C_COMPILER:FILEPATH=/usr/bin/cc
 
 //A wrapper around 'ar' adding the appropriate '--plugin' option
 // for the GCC compiler
@@ -156,8 +154,8 @@ CMAKE_EXE_LINKER_FLAGS_RELEASE:STRING=
 //Flags used by the linker during RELWITHDEBINFO builds.
 CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 
-//No help, variable specified on the command line.
-CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE
+//Enable/Disable output of compile commands during generation.
+CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=
 
 //Install path prefix, prepended onto install directories.
 CMAKE_INSTALL_PREFIX:PATH=/usr/local
@@ -289,15 +287,7 @@ PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/bin/pkg-config
 //The Set the PostgreSQL_INCLUDE_DIR cmake cache entry to the top-level
 // directory containing the PostgreSQL include directories. E.g
 // /usr/local/include/PostgreSQL/8.4 or C:/Program Files/PostgreSQL/8.4/include
-PostgreSQL_INCLUDE_DIR:PATH=PostgreSQL_INCLUDE_DIR-NOTFOUND
-
-//The Set the PostgreSQL_LIBRARY_DIR cmake cache entry to the top-level
-// directory containing the PostgreSQL libraries.
-PostgreSQL_LIBRARY_DEBUG:FILEPATH=PostgreSQL_LIBRARY_DEBUG-NOTFOUND
-
-//The Set the PostgreSQL_LIBRARY_DIR cmake cache entry to the top-level
-// directory containing the PostgreSQL libraries.
-PostgreSQL_LIBRARY_RELEASE:FILEPATH=PostgreSQL_LIBRARY_RELEASE-NOTFOUND
+PostgreSQL_INCLUDE_DIR:PATH=
 
 //The Set the PostgreSQL_INCLUDE_DIR cmake cache entry to the top-level
 // directory containing the PostgreSQL include directories. E.g
@@ -386,18 +376,6 @@ Z_VCPKG_CL:FILEPATH=Z_VCPKG_CL-NOTFOUND
 //The directory which contains the installed libraries for each
 // triplet
 _VCPKG_INSTALLED_DIR:PATH=/home/mohamad/gitProjects/uniProjects/Urban_Farm/build/vcpkg_installed
-
-//The directory containing a CMake configuration file for boost_headers.
-boost_headers_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/boost_headers-1.74.0
-
-//The directory containing a CMake configuration file for boost_random.
-boost_random_DIR:PATH=boost_random_DIR-NOTFOUND
-
-//No help, variable specified on the command line.
-cpprestsdk_DIR:UNINITIALIZED=~/opt/vcpkg/installed/x64-linux/share/cpprestsdk
-
-//The directory containing a CMake configuration file for libpqxx.
-libpqxx_DIR:PATH=libpqxx_DIR-NOTFOUND
 
 //Path to a library.
 pkgcfg_lib__OPENSSL_crypto:FILEPATH=/usr/lib/x86_64-linux-gnu/libcrypto.so
@@ -596,7 +574,7 @@ CMAKE_UNAME:INTERNAL=/usr/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding Boost
-FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[/home/mohamad/opt/vcpkg/installed/x64-linux/include][cfound components: random system thread filesystem chrono atomic date_time regex ][v1.84.0()]
+FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[/usr/include][cfound components: random system thread filesystem chrono atomic date_time regex ][v1.74.0()]
 //Details about finding OpenSSL
 FIND_PACKAGE_MESSAGE_DETAILS_OpenSSL:INTERNAL=[/usr/lib/x86_64-linux-gnu/libcrypto.so][/usr/include][c ][v3.0.2()]
 //Details about finding PostgreSQL
@@ -617,10 +595,6 @@ PKG_CONFIG_ARGN-ADVANCED:INTERNAL=1
 PKG_CONFIG_EXECUTABLE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: PostgreSQL_INCLUDE_DIR
 PostgreSQL_INCLUDE_DIR-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: PostgreSQL_LIBRARY_DEBUG
-PostgreSQL_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: PostgreSQL_LIBRARY_RELEASE
-PostgreSQL_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: PostgreSQL_TYPE_INCLUDE_DIR
 PostgreSQL_TYPE_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: VCPKG_VERBOSE
@@ -638,7 +612,7 @@ Z_VCPKG_ROOT_DIR:INTERNAL=/home/mohamad/opt/vcpkg
 //Components requested for this build tree.
 _Boost_COMPONENTS_SEARCHED:INTERNAL=atomic;chrono;date_time;filesystem;random;regex;system;thread
 //Last used Boost_INCLUDE_DIR value.
-_Boost_INCLUDE_DIR_LAST:INTERNAL=/home/mohamad/opt/vcpkg/installed/x64-linux/include
+_Boost_INCLUDE_DIR_LAST:INTERNAL=/usr/include
 //Last used Boost_LIBRARY_DIR_DEBUG value.
 _Boost_LIBRARY_DIR_DEBUG_LAST:INTERNAL=/home/mohamad/opt/vcpkg/installed/x64-linux/lib
 //Last used Boost_LIBRARY_DIR_RELEASE value.
@@ -684,8 +658,6 @@ _OPENSSL_openssl_PREFIX:INTERNAL=
 _OPENSSL_openssl_VERSION:INTERNAL=
 __pkg_config_arguments__OPENSSL:INTERNAL=QUIET;openssl
 __pkg_config_checked__OPENSSL:INTERNAL=1
-//ADVANCED property for variable: boost_headers_DIR
-boost_headers_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: pkgcfg_lib__OPENSSL_crypto
 pkgcfg_lib__OPENSSL_crypto-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: pkgcfg_lib__OPENSSL_ssl

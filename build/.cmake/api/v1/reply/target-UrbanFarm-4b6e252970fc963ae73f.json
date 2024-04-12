@@ -63,9 +63,6 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g"
-				},
-				{
 					"fragment" : "-std=gnu++17"
 				}
 			],
@@ -131,10 +128,6 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-g",
-				"role" : "flags"
-			},
-			{
 				"fragment" : "",
 				"role" : "flags"
 			},
@@ -153,7 +146,7 @@
 				"role" : "libraries"
 			},
 			{
-				"fragment" : "/home/mohamad/opt/vcpkg/installed/x64-linux/debug/lib/libpq.a",
+				"fragment" : "/home/mohamad/opt/vcpkg/installed/x64-linux/lib/libpq.a",
 				"role" : "libraries"
 			},
 			{
@@ -161,11 +154,11 @@
 				"role" : "libraries"
 			},
 			{
-				"fragment" : "/home/mohamad/opt/vcpkg/installed/x64-linux/debug/lib/libpgport.a",
+				"fragment" : "/home/mohamad/opt/vcpkg/installed/x64-linux/lib/libpgport.a",
 				"role" : "libraries"
 			},
 			{
-				"fragment" : "/home/mohamad/opt/vcpkg/installed/x64-linux/debug/lib/libpgcommon.a",
+				"fragment" : "/home/mohamad/opt/vcpkg/installed/x64-linux/lib/libpgcommon.a",
 				"role" : "libraries"
 			},
 			{

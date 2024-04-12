@@ -11,6 +11,9 @@ DatabaseConnector::DatabaseConnector(const std::string& connectionString)
     // Constructor implementation
 }
 
+pqxx::connection& DatabaseConnector::getConnection() {
+    return dbConnection; // return the reference to the database connection
+}
 
 void DatabaseConnector::testQuery() {
     try {
@@ -41,7 +44,7 @@ void DatabaseConnector::fetchSensorData() {
                 << ", Plant_ID: " << row["Plant_ID"].as<int>()
                 << ", Time: " << row["Time"].as<std::string>()
                 << ", Temperature: " << row["Temperature"].as<float>()
-                << "°C, Humidity: " << row["Humidity"].as<float>() << "%"
+                << "ï¿½C, Humidity: " << row["Humidity"].as<float>() << "%"
                 << std::endl;
         }
 
@@ -52,6 +55,18 @@ void DatabaseConnector::fetchSensorData() {
     }
 }
 
+void DatabaseConnector::insertWarning(pqxx::work& txn, int sensorId, const std::string& type) {
+    try {
+        std::string query = "INSERT INTO Warnings (sensor_id, type) VALUES (" +
+                            txn.quote(sensorId) + ", " + txn.quote(type) + ");";
+        txn.exec0(query);
+    } catch (const std::exception& e) {
+        std::cerr << "Failed to insert warning: " << e.what() << std::endl;
+        throw; // Optionally rethrow to handle further up if necessary
+    }
+}
+
+
 
 std::chrono::system_clock::time_point convertTimestamp(const std::string& timestamp) {
     std::tm tm = {};
@@ -61,12 +76,12 @@ std::chrono::system_clock::time_point convertTimestamp(const std::string& timest
 }
 
 
-void DatabaseConnector::fetchAndAnalyzeData() {
+void DatabaseConnector::fetchAndAnalyzeData(pqxx::work& txn) {
     try {
-        pqxx::work txn(dbConnection);
         pqxx::result r = txn.exec("SELECT * FROM sensorsdata WHERE processed = false");
 
-        AnomalyDetector anomalyDetector;
+        // Pass this DatabaseConnector instance to the AnomalyDetector
+        AnomalyDetector anomalyDetector(*this);  // Pass current instance to the constructor
 
         for (auto row : r) {
             // Construct a SensorData object from the row
@@ -82,12 +97,12 @@ void DatabaseConnector::fetchAndAnalyzeData() {
             SensorData previousData = fetchMostRecentSensorData(currentData.sensorID, txn);
 
             // Use the AnomalyDetector to check if the rate of change is anomalous
-            if (anomalyDetector.isRateOfChangeAnomalous(currentData, previousData)) {
-                //std::cout << "Anomalous rate of change detected for sensor ID: " << currentData.sensorID << std::endl;
+            if (anomalyDetector.isRateOfChangeAnomalous(currentData, previousData,txn)) {
+                std::cout << "Anomalous rate of change detected for sensor ID: " << currentData.sensorID << std::endl;
                 // Optionally, take further actions like logging the anomaly or alerting
             }
-            else if (anomalyDetector.isAnomalous(currentData)) {
-                //std::cout << "Anomaly detected for sensor ID: " << currentData.sensorID << std::endl;
+            else if (anomalyDetector.isAnomalous(currentData,txn)) {
+                std::cout << "Anomaly detected for sensor ID: " << currentData.sensorID << std::endl;
                 // Optionally, take further actions like logging the anomaly or alerting
             }
             else {
@@ -98,11 +113,12 @@ void DatabaseConnector::fetchAndAnalyzeData() {
             txn.exec0("UPDATE sensorsdata SET processed = true WHERE id = " + txn.quote(row["id"].as<int>()));
         }
 
-        txn.commit();
+        txn.commit(); // Only commit if everything in the loop has executed without throwing an exception
+    } catch (const std::exception& e) {
+        std::cerr << "Error during fetch and analyze: " << e.what() << std::endl;
+        txn.abort(); // Rollback the transaction in case of an error
     }
-    catch (const std::exception& e) {
-        std::cerr << "Database query failed: " << e.what() << std::endl;
-    }
+
 }
 
 

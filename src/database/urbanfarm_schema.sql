@@ -88,7 +88,7 @@ True if processed';
 --
 
 CREATE TABLE public.warnings (
-    id integer NOT NULL,
+    id serial,
     sensor_id integer,
     experiment_id integer,
     type character varying(255)

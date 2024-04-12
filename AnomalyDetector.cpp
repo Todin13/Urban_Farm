@@ -1,31 +1,38 @@
+#include "DatabaseConnector.h"  // Ensure this comes first if it defines a type used in AnomalyDetector.h
 #include "AnomalyDetector.h"
-#include "DatabaseConnector.h"
 #include <iostream>
 #include <cstdlib>  // For getenv()
 #include <string>
 
-bool AnomalyDetector::isAnomalous(const SensorData& data) {
+
+bool AnomalyDetector::isAnomalous(const SensorData& data, pqxx::work& txn) {
     const float temperatureThresholdLow = 10.0f;
     const float temperatureThresholdHigh = 40.0f;
     const float humidityThresholdLow = 10.0f;
     const float humidityThresholdHigh = 80.0f;
 
+    bool isAnomalyDetected = false;
+    std::string reason;
+
     if (data.temperature < temperatureThresholdLow || data.temperature > temperatureThresholdHigh) {
+        reason = "Temperature out of range (" + std::to_string(data.temperature) + "°C).";
         std::cout << "Anomaly detected for sensor ID: " << data.sensorID << " for plant ID: " << data.plantID
-            << ". Reason: Temperature out of range (" << data.temperature << "�C)." << std::endl;
-        return true;
+                  << ". Reason: " << reason << std::endl;
+        dbConnector.insertWarning(txn, data.sensorID, reason);
+        isAnomalyDetected = true;
     }
 
     if (data.humidity < humidityThresholdLow || data.humidity > humidityThresholdHigh) {
+        reason = "Humidity out of range (" + std::to_string(data.humidity) + "%).";
         std::cout << "Anomaly detected for sensor ID: " << data.sensorID << " for plant ID: " << data.plantID
-            << ". Reason: Humidity out of range (" << data.humidity << "%)." << std::endl;
-        return true;
+                  << ". Reason: " << reason << std::endl;
+        dbConnector.insertWarning(txn, data.sensorID, reason);
+        isAnomalyDetected = true;
     }
 
-    // Add other conditions
-
-    return false;
+    return isAnomalyDetected;
 }
+
 
 
 std::string AnomalyDetector::getEnvVar(const std::string &key, const std::string &defaultValue) {
@@ -36,28 +43,13 @@ std::string AnomalyDetector::getEnvVar(const std::string &key, const std::string
     return std::string(val);
 }
 
-void AnomalyDetector::analyzeData()
-{
-    //std::cout << "Test 0" << std::endl;
-    // Initialize the database connector
-    std::string host = getEnvVar("DB_HOST", "localhost");
-    std::string port = getEnvVar("DB_PORT", "5433");
-    std::string dbname = getEnvVar("DB_NAME", "urbanfarm");
-    std::string user = getEnvVar("DB_USER", "admin");
-    std::string password = getEnvVar("DB_PASSWORD", "urbanfarm123");
-
-    std::string connectionString = "host=" + host +
-                                   " port=" + port +
-                                   " dbname=" + dbname +
-                                   " user=" + user +
-                                   " password=" + password;
-
-    std::cout << "Connection String: " << connectionString << std::endl;
-    DatabaseConnector dbConnector(connectionString);
-    dbConnector.fetchAndAnalyzeData(); // Implement this method to fetch new data and analyze it
+void AnomalyDetector::analyzeData(pqxx::work& txn) {
+    std::cout << "Analyzing data..." << std::endl;
+    // Pass the transaction object to fetchAndAnalyzeData
+    dbConnector.fetchAndAnalyzeData(txn);
 }
 
-bool AnomalyDetector::isRateOfChangeAnomalous(const SensorData& currentData, const SensorData& previousData) {
+bool AnomalyDetector::isRateOfChangeAnomalous(const SensorData& currentData, const SensorData& previousData, pqxx::work& txn) {
     if (!previousData.isValid) {
         // No previous data to compare with
         return false;
@@ -69,20 +61,24 @@ bool AnomalyDetector::isRateOfChangeAnomalous(const SensorData& currentData, con
     const double temperatureChangeThreshold = 5.0;
     const double humidityChangeThreshold = 10.0;
 
+    bool anomalyDetected = false;
+    std::string reason;
+
     if (temperatureChange > temperatureChangeThreshold) {
-        std::cout << "Anomalous rate of change detected for sensor ID: " << currentData.sensorID << " for plant ID: " << currentData.plantID
-            << ". Reason: Temperature change too rapid (" << temperatureChange << "�C change)." << std::endl;
-        return true;
+        reason = "Temperature change too rapid (" + std::to_string(temperatureChange) + "°C change).";
+        std::cout << "Anomalous rate of change detected for sensor ID: " << currentData.sensorID 
+                  << " for plant ID: " << currentData.plantID << ". Reason: " << reason << std::endl;
+        dbConnector.insertWarning(txn, currentData.sensorID, reason); // Pass transaction object to insertWarning
+        anomalyDetected = true;
     }
 
     if (humidityChange > humidityChangeThreshold) {
-        std::cout << "Anomalous rate of change detected for sensor ID: " << currentData.sensorID << " for plant ID: " << currentData.plantID
-            << ". Reason: Humidity change too rapid (" << humidityChange << "% change)." << std::endl;
-        return true;
+        reason = "Humidity change too rapid (" + std::to_string(humidityChange) + "% change).";
+        std::cout << "Anomalous rate of change detected for sensor ID: " << currentData.sensorID 
+                  << " for plant ID: " << currentData.plantID << ". Reason: " << reason << std::endl;
+        dbConnector.insertWarning(txn, currentData.sensorID, reason); // Pass transaction object to insertWarning
+        anomalyDetected = true;
     }
 
-    // Add other rate of change checks
-
-    return false;
+    return anomalyDetected;
 }
-

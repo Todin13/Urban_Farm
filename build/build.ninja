@@ -12,7 +12,7 @@
 
 # =============================================================================
 # Project: UrbanFarm
-# Configurations: Debug
+# Configurations: 
 # =============================================================================
 
 #############################################
@@ -20,11 +20,6 @@
 
 ninja_required_version = 1.5
 
-
-#############################################
-# Set configuration variable for custom commands.
-
-CONFIGURATION = Debug
 # =============================================================================
 # Include auxiliary files.
 
@@ -49,58 +44,58 @@ cmake_ninja_workdir = /home/mohamad/gitProjects/uniProjects/Urban_Farm/build/
 
 build cmake_object_order_depends_target_UrbanFarm: phony || CMakeFiles/UrbanFarm.dir
 
-build CMakeFiles/UrbanFarm.dir/main.cpp.o: CXX_COMPILER__UrbanFarm_Debug /home/mohamad/gitProjects/uniProjects/Urban_Farm/main.cpp || cmake_object_order_depends_target_UrbanFarm
+build CMakeFiles/UrbanFarm.dir/main.cpp.o: CXX_COMPILER__UrbanFarm_ /home/mohamad/gitProjects/uniProjects/Urban_Farm/main.cpp || cmake_object_order_depends_target_UrbanFarm
   DEFINES = -DCPPREST_EXCLUDE_WEBSOCKETS=1 -DCPPREST_FORCE_HTTP_CLIENT_ASIO -DCPPREST_FORCE_HTTP_LISTENER_ASIO -DCPPREST_NO_SSL_LEAK_SUPPRESS
   DEP_FILE = CMakeFiles/UrbanFarm.dir/main.cpp.o.d
-  FLAGS = -g -std=gnu++17
+  FLAGS = -std=gnu++17
   INCLUDES = -I/home/mohamad/gitProjects/uniProjects/Urban_Farm -I/opt/vcpkg/installed/x64-linux/include -isystem /home/mohamad/opt/vcpkg/installed/x64-linux/include
   OBJECT_DIR = CMakeFiles/UrbanFarm.dir
   OBJECT_FILE_DIR = CMakeFiles/UrbanFarm.dir
 
-build CMakeFiles/UrbanFarm.dir/AnomalyDetector.cpp.o: CXX_COMPILER__UrbanFarm_Debug /home/mohamad/gitProjects/uniProjects/Urban_Farm/AnomalyDetector.cpp || cmake_object_order_depends_target_UrbanFarm
+build CMakeFiles/UrbanFarm.dir/AnomalyDetector.cpp.o: CXX_COMPILER__UrbanFarm_ /home/mohamad/gitProjects/uniProjects/Urban_Farm/AnomalyDetector.cpp || cmake_object_order_depends_target_UrbanFarm
   DEFINES = -DCPPREST_EXCLUDE_WEBSOCKETS=1 -DCPPREST_FORCE_HTTP_CLIENT_ASIO -DCPPREST_FORCE_HTTP_LISTENER_ASIO -DCPPREST_NO_SSL_LEAK_SUPPRESS
   DEP_FILE = CMakeFiles/UrbanFarm.dir/AnomalyDetector.cpp.o.d
-  FLAGS = -g -std=gnu++17
+  FLAGS = -std=gnu++17
   INCLUDES = -I/home/mohamad/gitProjects/uniProjects/Urban_Farm -I/opt/vcpkg/installed/x64-linux/include -isystem /home/mohamad/opt/vcpkg/installed/x64-linux/include
   OBJECT_DIR = CMakeFiles/UrbanFarm.dir
   OBJECT_FILE_DIR = CMakeFiles/UrbanFarm.dir
 
-build CMakeFiles/UrbanFarm.dir/DatabaseConnector.cpp.o: CXX_COMPILER__UrbanFarm_Debug /home/mohamad/gitProjects/uniProjects/Urban_Farm/DatabaseConnector.cpp || cmake_object_order_depends_target_UrbanFarm
+build CMakeFiles/UrbanFarm.dir/DatabaseConnector.cpp.o: CXX_COMPILER__UrbanFarm_ /home/mohamad/gitProjects/uniProjects/Urban_Farm/DatabaseConnector.cpp || cmake_object_order_depends_target_UrbanFarm
   DEFINES = -DCPPREST_EXCLUDE_WEBSOCKETS=1 -DCPPREST_FORCE_HTTP_CLIENT_ASIO -DCPPREST_FORCE_HTTP_LISTENER_ASIO -DCPPREST_NO_SSL_LEAK_SUPPRESS
   DEP_FILE = CMakeFiles/UrbanFarm.dir/DatabaseConnector.cpp.o.d
-  FLAGS = -g -std=gnu++17
+  FLAGS = -std=gnu++17
   INCLUDES = -I/home/mohamad/gitProjects/uniProjects/Urban_Farm -I/opt/vcpkg/installed/x64-linux/include -isystem /home/mohamad/opt/vcpkg/installed/x64-linux/include
   OBJECT_DIR = CMakeFiles/UrbanFarm.dir
   OBJECT_FILE_DIR = CMakeFiles/UrbanFarm.dir
 
-build CMakeFiles/UrbanFarm.dir/JsonSerializer.cpp.o: CXX_COMPILER__UrbanFarm_Debug /home/mohamad/gitProjects/uniProjects/Urban_Farm/JsonSerializer.cpp || cmake_object_order_depends_target_UrbanFarm
+build CMakeFiles/UrbanFarm.dir/JsonSerializer.cpp.o: CXX_COMPILER__UrbanFarm_ /home/mohamad/gitProjects/uniProjects/Urban_Farm/JsonSerializer.cpp || cmake_object_order_depends_target_UrbanFarm
   DEFINES = -DCPPREST_EXCLUDE_WEBSOCKETS=1 -DCPPREST_FORCE_HTTP_CLIENT_ASIO -DCPPREST_FORCE_HTTP_LISTENER_ASIO -DCPPREST_NO_SSL_LEAK_SUPPRESS
   DEP_FILE = CMakeFiles/UrbanFarm.dir/JsonSerializer.cpp.o.d
-  FLAGS = -g -std=gnu++17
+  FLAGS = -std=gnu++17
   INCLUDES = -I/home/mohamad/gitProjects/uniProjects/Urban_Farm -I/opt/vcpkg/installed/x64-linux/include -isystem /home/mohamad/opt/vcpkg/installed/x64-linux/include
   OBJECT_DIR = CMakeFiles/UrbanFarm.dir
   OBJECT_FILE_DIR = CMakeFiles/UrbanFarm.dir
 
-build CMakeFiles/UrbanFarm.dir/MetricsCollector.cpp.o: CXX_COMPILER__UrbanFarm_Debug /home/mohamad/gitProjects/uniProjects/Urban_Farm/MetricsCollector.cpp || cmake_object_order_depends_target_UrbanFarm
+build CMakeFiles/UrbanFarm.dir/MetricsCollector.cpp.o: CXX_COMPILER__UrbanFarm_ /home/mohamad/gitProjects/uniProjects/Urban_Farm/MetricsCollector.cpp || cmake_object_order_depends_target_UrbanFarm
   DEFINES = -DCPPREST_EXCLUDE_WEBSOCKETS=1 -DCPPREST_FORCE_HTTP_CLIENT_ASIO -DCPPREST_FORCE_HTTP_LISTENER_ASIO -DCPPREST_NO_SSL_LEAK_SUPPRESS
   DEP_FILE = CMakeFiles/UrbanFarm.dir/MetricsCollector.cpp.o.d
-  FLAGS = -g -std=gnu++17
+  FLAGS = -std=gnu++17
   INCLUDES = -I/home/mohamad/gitProjects/uniProjects/Urban_Farm -I/opt/vcpkg/installed/x64-linux/include -isystem /home/mohamad/opt/vcpkg/installed/x64-linux/include
   OBJECT_DIR = CMakeFiles/UrbanFarm.dir
   OBJECT_FILE_DIR = CMakeFiles/UrbanFarm.dir
 
-build CMakeFiles/UrbanFarm.dir/RestServer.cpp.o: CXX_COMPILER__UrbanFarm_Debug /home/mohamad/gitProjects/uniProjects/Urban_Farm/RestServer.cpp || cmake_object_order_depends_target_UrbanFarm
+build CMakeFiles/UrbanFarm.dir/RestServer.cpp.o: CXX_COMPILER__UrbanFarm_ /home/mohamad/gitProjects/uniProjects/Urban_Farm/RestServer.cpp || cmake_object_order_depends_target_UrbanFarm
   DEFINES = -DCPPREST_EXCLUDE_WEBSOCKETS=1 -DCPPREST_FORCE_HTTP_CLIENT_ASIO -DCPPREST_FORCE_HTTP_LISTENER_ASIO -DCPPREST_NO_SSL_LEAK_SUPPRESS
   DEP_FILE = CMakeFiles/UrbanFarm.dir/RestServer.cpp.o.d
-  FLAGS = -g -std=gnu++17
+  FLAGS = -std=gnu++17
   INCLUDES = -I/home/mohamad/gitProjects/uniProjects/Urban_Farm -I/opt/vcpkg/installed/x64-linux/include -isystem /home/mohamad/opt/vcpkg/installed/x64-linux/include
   OBJECT_DIR = CMakeFiles/UrbanFarm.dir
   OBJECT_FILE_DIR = CMakeFiles/UrbanFarm.dir
 
-build CMakeFiles/UrbanFarm.dir/WarningReporter.cpp.o: CXX_COMPILER__UrbanFarm_Debug /home/mohamad/gitProjects/uniProjects/Urban_Farm/WarningReporter.cpp || cmake_object_order_depends_target_UrbanFarm
+build CMakeFiles/UrbanFarm.dir/WarningReporter.cpp.o: CXX_COMPILER__UrbanFarm_ /home/mohamad/gitProjects/uniProjects/Urban_Farm/WarningReporter.cpp || cmake_object_order_depends_target_UrbanFarm
   DEFINES = -DCPPREST_EXCLUDE_WEBSOCKETS=1 -DCPPREST_FORCE_HTTP_CLIENT_ASIO -DCPPREST_FORCE_HTTP_LISTENER_ASIO -DCPPREST_NO_SSL_LEAK_SUPPRESS
   DEP_FILE = CMakeFiles/UrbanFarm.dir/WarningReporter.cpp.o.d
-  FLAGS = -g -std=gnu++17
+  FLAGS = -std=gnu++17
   INCLUDES = -I/home/mohamad/gitProjects/uniProjects/Urban_Farm -I/opt/vcpkg/installed/x64-linux/include -isystem /home/mohamad/opt/vcpkg/installed/x64-linux/include
   OBJECT_DIR = CMakeFiles/UrbanFarm.dir
   OBJECT_FILE_DIR = CMakeFiles/UrbanFarm.dir
@@ -113,9 +108,8 @@ build CMakeFiles/UrbanFarm.dir/WarningReporter.cpp.o: CXX_COMPILER__UrbanFarm_De
 #############################################
 # Link the executable UrbanFarm
 
-build UrbanFarm: CXX_EXECUTABLE_LINKER__UrbanFarm_Debug CMakeFiles/UrbanFarm.dir/main.cpp.o CMakeFiles/UrbanFarm.dir/AnomalyDetector.cpp.o CMakeFiles/UrbanFarm.dir/DatabaseConnector.cpp.o CMakeFiles/UrbanFarm.dir/JsonSerializer.cpp.o CMakeFiles/UrbanFarm.dir/MetricsCollector.cpp.o CMakeFiles/UrbanFarm.dir/RestServer.cpp.o CMakeFiles/UrbanFarm.dir/WarningReporter.cpp.o | /home/mohamad/opt/vcpkg/installed/x64-linux/debug/lib/libcpprest.a /home/mohamad/opt/vcpkg/installed/x64-linux/debug/lib/libpqxx-7.9.a /usr/lib/x86_64-linux-gnu/libz.so /home/mohamad/opt/vcpkg/installed/x64-linux/debug/lib/libpq.a /home/mohamad/opt/vcpkg/installed/x64-linux/debug/lib/libpgport.a /home/mohamad/opt/vcpkg/installed/x64-linux/debug/lib/libpgcommon.a /usr/lib/x86_64-linux-gnu/libssl.so /usr/lib/x86_64-linux-gnu/libcrypto.so
-  FLAGS = -g
-  LINK_LIBRARIES = /home/mohamad/opt/vcpkg/installed/x64-linux/debug/lib/libcpprest.a  /home/mohamad/opt/vcpkg/installed/x64-linux/debug/lib/libpqxx-7.9.a  /usr/lib/x86_64-linux-gnu/libz.so  /home/mohamad/opt/vcpkg/installed/x64-linux/debug/lib/libpq.a  -ldl  /home/mohamad/opt/vcpkg/installed/x64-linux/debug/lib/libpgport.a  /home/mohamad/opt/vcpkg/installed/x64-linux/debug/lib/libpgcommon.a  /usr/lib/x86_64-linux-gnu/libssl.so  /usr/lib/x86_64-linux-gnu/libcrypto.so
+build UrbanFarm: CXX_EXECUTABLE_LINKER__UrbanFarm_ CMakeFiles/UrbanFarm.dir/main.cpp.o CMakeFiles/UrbanFarm.dir/AnomalyDetector.cpp.o CMakeFiles/UrbanFarm.dir/DatabaseConnector.cpp.o CMakeFiles/UrbanFarm.dir/JsonSerializer.cpp.o CMakeFiles/UrbanFarm.dir/MetricsCollector.cpp.o CMakeFiles/UrbanFarm.dir/RestServer.cpp.o CMakeFiles/UrbanFarm.dir/WarningReporter.cpp.o | /home/mohamad/opt/vcpkg/installed/x64-linux/debug/lib/libcpprest.a /home/mohamad/opt/vcpkg/installed/x64-linux/debug/lib/libpqxx-7.9.a /usr/lib/x86_64-linux-gnu/libz.so /home/mohamad/opt/vcpkg/installed/x64-linux/lib/libpq.a /home/mohamad/opt/vcpkg/installed/x64-linux/lib/libpgport.a /home/mohamad/opt/vcpkg/installed/x64-linux/lib/libpgcommon.a /usr/lib/x86_64-linux-gnu/libssl.so /usr/lib/x86_64-linux-gnu/libcrypto.so
+  LINK_LIBRARIES = /home/mohamad/opt/vcpkg/installed/x64-linux/debug/lib/libcpprest.a  /home/mohamad/opt/vcpkg/installed/x64-linux/debug/lib/libpqxx-7.9.a  /usr/lib/x86_64-linux-gnu/libz.so  /home/mohamad/opt/vcpkg/installed/x64-linux/lib/libpq.a  -ldl  /home/mohamad/opt/vcpkg/installed/x64-linux/lib/libpgport.a  /home/mohamad/opt/vcpkg/installed/x64-linux/lib/libpgcommon.a  /usr/lib/x86_64-linux-gnu/libssl.so  /usr/lib/x86_64-linux-gnu/libcrypto.so
   OBJECT_DIR = CMakeFiles/UrbanFarm.dir
   POST_BUILD = :
   PRE_LINK = :
