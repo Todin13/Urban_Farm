@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: sensor8
+  name: sensor8
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: sensor8
+  template:
+    metadata:
+      labels:
+        io.kompose.network/urban-farm-default: "true"
+        io.kompose.service: sensor8
+    spec:
+      containers:
+        - env:
+            - name: SCENARIO_ID
+              value: "8"
+            - name: SERVER_URL
+              value: http://localhost:8080/receive
+          image: abelfodil/sensor:0.0.1
+          name: sensor8
+      restartPolicy: Always

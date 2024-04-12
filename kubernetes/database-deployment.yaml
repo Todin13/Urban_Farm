@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+  labels:
+    io.kompose.service: database
+  name: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: database
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.network/urban-farm-default: "true"
+        io.kompose.service: database
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: urbanfarm
+            - name: POSTGRES_PASSWORD
+              value: urbanfarm123
+            - name: POSTGRES_USER
+              value: admin
+          image: postgres:latest
+          name: database
+          ports:
+            - containerPort: 5432
+              hostPort: 5433
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: db-data
+            - mountPath: /docker-entrypoint-initdb.d/init.sql
+              name: database-claim1
+      restartPolicy: Always
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: db-data
+        - name: database-claim1
+          persistentVolumeClaim:
+            claimName: database-claim1

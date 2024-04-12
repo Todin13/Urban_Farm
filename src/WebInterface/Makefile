@@ -1,6 +1,6 @@
 DOCKER_REPO = todin13/
 IMAGE_NAME = web-interface
-TAG = 1.0.0
+TAG = 0.1.0
 CONTAINER_NAME = Webinterface
 
 prepare:
