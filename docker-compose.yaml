@@ -36,7 +36,7 @@ services:
     environment:
       - SERVER_URL=http://localhost:8080/receive
       - SCENARIO_ID=6
-  sensor7: # only sen temperature on plant 5 with -500°F equivalent of -295.555°C
+  sensor7: # only send temperature on plant 5 with -500°F equivalent of -295.555°C
     image: abelfodil/sensor:0.0.1
     network_mode: "host"
     environment:
