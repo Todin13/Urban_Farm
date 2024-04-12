@@ -113,7 +113,7 @@ def display_sensor_section(cursor):
 
     # Fetch sensor data
     try:
-        cursor.execute("SELECT ID, PlantID FROM Sensors;")
+        cursor.execute("SELECT ID, Version FROM sensors;")
         sensor_data = cursor.fetchall()
     except psycopg2.Error as e:
         st.error(f"Error fetching sensor data: {e}")
@@ -121,7 +121,7 @@ def display_sensor_section(cursor):
 
     # Display sensor table
     st.write("Sensor Table:")
-    sensor_df = pd.DataFrame(sensor_data, columns=["Sensor ID", "PlantID"])
+    sensor_df = pd.DataFrame(sensor_data, columns=["Sensor ID", "Version"])
     st.dataframe(sensor_df)
 
     # Handle sensor selection

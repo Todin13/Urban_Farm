@@ -97,7 +97,7 @@ services:
       - DB_NAME=urbanfarm
       - DB_USER=admin
       - DB_PASSWORD=urbanfarm123
-      - API_PATH=/your-api-path
+      - API_PATH=/receive
       - API_HOST=0.0.0.0
       - API_PORT=8080
       
