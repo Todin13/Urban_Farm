@@ -23,8 +23,6 @@ while conn is None:
     except psycopg2.OperationalError:
         sleep(1)
 
-#with conn.cursor() as cur:
-#    cur.execute("TRUNCATE SensorsData;")
 
 with conn.cursor() as cur:
     cur.execute("SELECT MAX(ID) FROM SensorsData")
@@ -52,9 +50,3 @@ def inserer(donnees):
         conn.commit()
 
         print(f"Ligne insérée dans la table : {donnees}")
-        
-        """query = "SELECT * FROM SensorsData"
-        cur.execute(query)
-        rows = cur.fetchall()
-        for row in rows:
-            print(row)"""
