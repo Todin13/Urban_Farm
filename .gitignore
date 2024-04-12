@@ -1,7 +1,4 @@
-# Created by https://www.toptal.com/developers/gitignore/api/cmake,c++
-# Edit at https://www.toptal.com/developers/gitignore?templates=cmake,c++
 
-### C++ ###
 # Prerequisites
 *.d
 
@@ -10,6 +7,8 @@
 *.lo
 *.o
 *.obj
+
+*.lock
 
 # Precompiled Headers
 *.gch
@@ -35,7 +34,7 @@
 *.out
 *.app
 
-### CMake ###
+
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
@@ -456,3 +455,17 @@ FodyWeavers.xsd
 # Misc
 .gpteng
 prompt
+
+# Misc
+.gpteng
+prompt
+
+# cache
+__pycache__
+
+# build
+build
+*.lock
+
+# env
+.venv
