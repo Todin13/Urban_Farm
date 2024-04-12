@@ -34,8 +34,16 @@ ENV OPENSSL_CRYPTO_LIBRARY=/opt/vcpkg/installed/x64-linux/lib/libcrypto.a
 ENV OPENSSL_INCLUDE_DIR=/opt/vcpkg/installed/x64-linux/include
 ENV OPENSSL_ROOT_DIR=/opt/vcpkg/installed/x64-linux
 ENV BOOST_INCLUDEDIR=/opt/vcpkg/installed/x64-linux/include
-ENV LIBPQXX_DIR=/opt/vcpkg/installed/x64-linux/share/libpqxx
+ENV libpqxx_DIR=/opt/vcpkg/installed/x64-linux/share/libpqxx
+ENV cpprestsdk_DIR=/opt/vcpkg/installed/x64-linux/share/cpprestsdk
 
+# Find where PostgreSQL headers are installed via system package
+RUN find /usr -name 'libpq-fe.h'
+
+# Assuming headers are located in /usr/include/postgresql, set the ENV var in Dockerfile
+ENV PostgreSQL_INCLUDE_DIR=/usr/include/postgresql
+
+RUN find /opt/vcpkg/installed -name 'cpprestsdkConfig.cmake' -or -name 'cpprestsdk-config.cmake'
 
 # Copy your project files into the Docker image
 WORKDIR /usr/src/urbanfarm
@@ -53,7 +61,8 @@ RUN cmake -DCMAKE_BUILD_TYPE=Release \
           -DZLIB_INCLUDE_DIR=$ZLIB_INCLUDE_DIR \
           -DOPENSSL_ROOT_DIR=$OPENSSL_ROOT_DIR \
           -Dlibpqxx_DIR=$LIBPQXX_DIR \
-          -DBOOST_INCLUDEDIR=$BOOST_INCLUDEDIR ..
+          -DBOOST_INCLUDEDIR=$BOOST_INCLUDEDIR \
+          -DPostgreSQL_INCLUDE_DIR=$PostgreSQL_INCLUDE_DIR ..
 
 
 # Build the project
