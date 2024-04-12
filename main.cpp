@@ -7,21 +7,19 @@
 #include <thread>
 #include <cstdlib>  // For getenv()
 
-std::string getEnvVar(const std::string &key, const std::string &defaultValue) {
-    const char* val = getenv(key.c_str());
-    if (val == nullptr) {  // Variable not found
-        return defaultValue;
-    }
-    return std::string(val);
-}
 
 int main() {
+    std::cout.setf(std::ios::unitbuf); // turn off buffering for cout
+    std::cout << "This is a test message.";
+    // Create an instance of AnomalyDetector
+    AnomalyDetector anomalyDetector;
+
     // Initialize the database connector
-    std::string host = getEnvVar("DB_HOST", "localhost");
-    std::string port = getEnvVar("DB_PORT", "5433");
-    std::string dbname = getEnvVar("DB_NAME", "urbanfarm");
-    std::string user = getEnvVar("DB_USER", "admin");
-    std::string password = getEnvVar("DB_PASSWORD", "urbanfarm123");
+    std::string host = anomalyDetector.getEnvVar("DB_HOST", "localhost");
+    std::string port = anomalyDetector.getEnvVar("DB_PORT", "5433");
+    std::string dbname = anomalyDetector.getEnvVar("DB_NAME", "urbanfarm");
+    std::string user = anomalyDetector.getEnvVar("DB_USER", "admin");
+    std::string password = anomalyDetector.getEnvVar("DB_PASSWORD", "urbanfarm123");
 
     std::string connectionString = "host=" + host +
                                    " port=" + port +
@@ -36,9 +34,6 @@ int main() {
     
     // Initialize the metrics collector
     MetricsCollector metricsCollector;
-
-    // Create an instance of AnomalyDetector
-    AnomalyDetector anomalyDetector;
 
     // Initialize and start the REST server
     RestServer server(8080, dbConnector, metricsCollector);

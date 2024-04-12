@@ -1,6 +1,8 @@
 #include "AnomalyDetector.h"
 #include "DatabaseConnector.h"
 #include <iostream>
+#include <cstdlib>  // For getenv()
+#include <string>
 
 bool AnomalyDetector::isAnomalous(const SensorData& data) {
     const float temperatureThresholdLow = 10.0f;
@@ -10,7 +12,7 @@ bool AnomalyDetector::isAnomalous(const SensorData& data) {
 
     if (data.temperature < temperatureThresholdLow || data.temperature > temperatureThresholdHigh) {
         std::cout << "Anomaly detected for sensor ID: " << data.sensorID << " for plant ID: " << data.plantID
-            << ". Reason: Temperature out of range (" << data.temperature << "°C)." << std::endl;
+            << ". Reason: Temperature out of range (" << data.temperature << "ï¿½C)." << std::endl;
         return true;
     }
 
@@ -26,11 +28,31 @@ bool AnomalyDetector::isAnomalous(const SensorData& data) {
 }
 
 
+std::string AnomalyDetector::getEnvVar(const std::string &key, const std::string &defaultValue) {
+    const char* val = getenv(key.c_str());
+    if (val == nullptr) {  // Variable not found
+        return defaultValue;
+    }
+    return std::string(val);
+}
 
 void AnomalyDetector::analyzeData()
 {
     //std::cout << "Test 0" << std::endl;
-    const std::string connectionString = "host=localhost port=5433 dbname=urbanfarm user=admin password=urbanfarm123";
+    // Initialize the database connector
+    std::string host = getEnvVar("DB_HOST", "localhost");
+    std::string port = getEnvVar("DB_PORT", "5433");
+    std::string dbname = getEnvVar("DB_NAME", "urbanfarm");
+    std::string user = getEnvVar("DB_USER", "admin");
+    std::string password = getEnvVar("DB_PASSWORD", "urbanfarm123");
+
+    std::string connectionString = "host=" + host +
+                                   " port=" + port +
+                                   " dbname=" + dbname +
+                                   " user=" + user +
+                                   " password=" + password;
+
+    std::cout << "Connection String: " << connectionString << std::endl;
     DatabaseConnector dbConnector(connectionString);
     dbConnector.fetchAndAnalyzeData(); // Implement this method to fetch new data and analyze it
 }
@@ -49,7 +71,7 @@ bool AnomalyDetector::isRateOfChangeAnomalous(const SensorData& currentData, con
 
     if (temperatureChange > temperatureChangeThreshold) {
         std::cout << "Anomalous rate of change detected for sensor ID: " << currentData.sensorID << " for plant ID: " << currentData.plantID
-            << ". Reason: Temperature change too rapid (" << temperatureChange << "°C change)." << std::endl;
+            << ". Reason: Temperature change too rapid (" << temperatureChange << "ï¿½C change)." << std::endl;
         return true;
     }
 
