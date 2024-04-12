@@ -1,53 +1,53 @@
 version: '3.8'
 services:
-  # sensor1:
-  #   image: abelfodil/sensor:0.0.1
-  #   network_mode: "host"
-  #   environment:
-  #     - SERVER_URL=http://localhost:8080/receive
-  #     - SCENARIO_ID=1
-  # sensor2:
-  #   image: abelfodil/sensor:0.0.1
-  #   network_mode: "host"
-  #   environment:
-  #     - SERVER_URL=http://localhost:8080/receive
-  #     - SCENARIO_ID=2
-  # sensor3:
-  #   image: abelfodil/sensor:0.0.1
-  #   network_mode: "host"
-  #   environment:
-  #     - SERVER_URL=http://localhost:8080/receive
-  #     - SCENARIO_ID=3
-  # sensor4:
-  #   image: abelfodil/sensor:0.0.1
-  #   network_mode: "host"
-  #   environment:
-  #     - SERVER_URL=http://localhost:8080/receive
-  #     - SCENARIO_ID=4
-  # sensor5:
-  #   image: abelfodil/sensor:0.0.1
-  #   network_mode: "host"
-  #   environment:
-  #     - SERVER_URL=http://localhost:8080/receive
-  #     - SCENARIO_ID=5
-  # sensor6:
-  #   image: abelfodil/sensor:0.0.1
-  #   network_mode: "host"
-  #   environment:
-  #     - SERVER_URL=http://localhost:8080/receive
-  #     - SCENARIO_ID=6
-  # sensor7:
-  #   image: abelfodil/sensor:0.0.1
-  #   network_mode: "host"
-  #   environment:
-  #     - SERVER_URL=http://localhost:8080/receive
-  #     - SCENARIO_ID=7
-  # sensor8:
-  #   image: abelfodil/sensor:0.0.1
-  #   network_mode: "host"
-  #   environment:
-  #     - SERVER_URL=http://localhost:8080/receive
-  #     - SCENARIO_ID=8
+  sensor1:
+    image: abelfodil/sensor:0.0.1
+    network_mode: "host"
+    environment:
+      - SERVER_URL=http://localhost:8080/receive
+      - SCENARIO_ID=1
+  sensor2:
+    image: abelfodil/sensor:0.0.1
+    network_mode: "host"
+    environment:
+      - SERVER_URL=http://localhost:8080/receive
+      - SCENARIO_ID=2
+  sensor3:
+    image: abelfodil/sensor:0.0.1
+    network_mode: "host"
+    environment:
+      - SERVER_URL=http://localhost:8080/receive
+      - SCENARIO_ID=3
+  sensor4:
+    image: abelfodil/sensor:0.0.1
+    network_mode: "host"
+    environment:
+      - SERVER_URL=http://localhost:8080/receive
+      - SCENARIO_ID=4
+  sensor5:
+    image: abelfodil/sensor:0.0.1
+    network_mode: "host"
+    environment:
+      - SERVER_URL=http://localhost:8080/receive
+      - SCENARIO_ID=5
+  sensor6:
+    image: abelfodil/sensor:0.0.1
+    network_mode: "host"
+    environment:
+      - SERVER_URL=http://localhost:8080/receive
+      - SCENARIO_ID=6
+  sensor7:
+    image: abelfodil/sensor:0.0.1
+    network_mode: "host"
+    environment:
+      - SERVER_URL=http://localhost:8080/receive
+      - SCENARIO_ID=7
+  sensor8:
+    image: abelfodil/sensor:0.0.1
+    network_mode: "host"
+    environment:
+      - SERVER_URL=http://localhost:8080/receive
+      - SCENARIO_ID=8
   # sensorCustom:
   #   image: abelfodil/sensor:0.0.1
   #   network_mode: "host"
@@ -60,7 +60,7 @@ services:
   #     - MEASURES=temperature:285.15°K,temperature:286.15°K,humidity:12%
  
   urbanfarm:
-    image: warnex/urbanfarm_0.8
+    image: warnex/urbanfarm_0.9
     ports:
       - "8090:8090"
     environment:
@@ -73,6 +73,35 @@ services:
       - database
     restart: unless-stopped
     command: ["./UrbanFarm"]  # Keep the container running
+    
+  collecte_donnees:
+    image: todin13/api-data-collection:0.1.0
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+    environment:
+      - DB_HOST=database
+      - DB_PORT=5432
+      - DB_NAME=urbanfarm
+      - DB_USER=admin
+      - DB_PASSWORD=urbanfarm123
+      - API_PATH=/receive
+      - API_HOST=0.0.0.0
+      - API_PORT=8080
+
+  web_interface:
+    image: todin13/web-interface:0.1.0
+    ports:
+      - 8501-8501
+    depends_on:
+      - database
+    environment:
+      - POSTGRES_HOST=database
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=urbanfarm
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=urbanfarm123
 
   database:
     image: postgres:latest

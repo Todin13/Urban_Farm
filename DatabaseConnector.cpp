@@ -84,6 +84,12 @@ void DatabaseConnector::fetchAndAnalyzeData(pqxx::work& txn) {
         AnomalyDetector anomalyDetector(*this);  // Pass current instance to the constructor
 
         for (auto row : r) {
+            // Check for null values in temperature or humidity before proceeding
+            if (row["temperature"].is_null() || row["humidity"].is_null()) {
+                std::cout << "Skipping sensor ID " << row["sensor_id"].as<int>() << " due to null values." << std::endl;
+                continue;  // Skip this iteration if temperature or humidity is null
+            }
+
             // Construct a SensorData object from the row
             SensorData currentData;
             currentData.sensorID = row["sensor_id"].as<int>();
@@ -97,11 +103,11 @@ void DatabaseConnector::fetchAndAnalyzeData(pqxx::work& txn) {
             SensorData previousData = fetchMostRecentSensorData(currentData.sensorID, txn);
 
             // Use the AnomalyDetector to check if the rate of change is anomalous
-            if (anomalyDetector.isRateOfChangeAnomalous(currentData, previousData,txn)) {
+            if (anomalyDetector.isRateOfChangeAnomalous(currentData, previousData, txn)) {
                 std::cout << "Anomalous rate of change detected for sensor ID: " << currentData.sensorID << std::endl;
                 // Optionally, take further actions like logging the anomaly or alerting
             }
-            else if (anomalyDetector.isAnomalous(currentData,txn)) {
+            else if (anomalyDetector.isAnomalous(currentData, txn)) {
                 std::cout << "Anomaly detected for sensor ID: " << currentData.sensorID << std::endl;
                 // Optionally, take further actions like logging the anomaly or alerting
             }
@@ -118,7 +124,6 @@ void DatabaseConnector::fetchAndAnalyzeData(pqxx::work& txn) {
         std::cerr << "Error during fetch and analyze: " << e.what() << std::endl;
         txn.abort(); // Rollback the transaction in case of an error
     }
-
 }
 
 
