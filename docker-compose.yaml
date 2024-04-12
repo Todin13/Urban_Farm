@@ -48,47 +48,36 @@ services:
     environment:
       - SERVER_URL=http://localhost:8080/receive
       - SCENARIO_ID=8
-  sensorCustom: # alterne humidité et temperature
-    image: abelfodil/sensor:0.0.1
-    network_mode: "host"
-    environment:
-      - SERVER_URL=http://localhost:8080/receive
-      - PLANT_ID=12
-      - SENSOR_ID=88712531
-      - SENSOR_VERSION=FR-v7
-      - PERIOD=2s
-      - MEASURES=temperature:285.15°K,temperature:286.15°K,humidity:12%
 
-  database:
-    image: postgres:latest
+  # sensorCustom:
+  #   image: abelfodil/sensor:0.0.1
+  #   network_mode: "host"
+  #   environment:
+  #     - SERVER_URL=http://localhost:8080/receive
+  #     - PLANT_ID=12
+  #     - SENSOR_ID=88712531
+  #     - SENSOR_VERSION=FR-v7
+  #     - PERIOD=2s
+  #     - MEASURES=temperature:285.15°K,temperature:286.15°K,humidity:12%
+ 
+  urbanfarm:
+    image: warnex/urbanfarm_0.11
     ports:
-      - "5433:5432"
-    environment:
-      POSTGRES_DB: urbanfarm
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: urbanfarm123
-    volumes:
-      - db-data:/var/lib/postgresql/data
-      - ./src/database/init.sql:/docker-entrypoint-initdb.d/init.sql
-    restart: unless-stopped  
+      - "8090:8090"
 
-  pgadmin:
-    image: dpage/pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: "pgadmin@example.com"
-      PGADMIN_DEFAULT_PASSWORD: "admin"
-    ports:
-      - "80:80"
+      - DB_HOST=database
+      - DB_PORT=5432
+      - DB_NAME=urbanfarm
+      - DB_USER=admin
+      - DB_PASS=urbanfarm123
     depends_on:
       - database
-    restart: unless-stopped  
-    volumes:
-      - pgadmin:/var/lib/pgadmin
-
+    restart: unless-stopped
+    command: ["./UrbanFarm"]  # Keep the container running
+    
   collecte_donnees:
-    build:
-      context: src/collecte_donnees
-      dockerfile: Dockerfile
+    image: todin13/api-data-collection:0.1.0
     ports:
       - 8080:8080
     depends_on:
@@ -104,9 +93,7 @@ services:
       - API_PORT=8080
 
   web_interface:
-    build:
-      context: src/WebInterface
-      dockerfile: dockerfile
+    image: todin13/web-interface:0.1.0
     ports:
       - 8501-8501
     depends_on:
@@ -117,7 +104,29 @@ services:
       - POSTGRES_DB=urbanfarm
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=urbanfarm123
-            
-volumes:
-  db-data:
+
+  database:
+    image: postgres:latest
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: urbanfarm
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: urbanfarm123
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./src/database/urbanfarm_schema.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped  # This line should be indented to be part of the database service
+
+
   pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "pgadmin@example.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "80:80"
+    depends_on:
+      - database
+
+  db-data:

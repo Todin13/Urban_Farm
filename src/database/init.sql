@@ -21,12 +21,12 @@ CREATE TABLE ExperimentData (
 
 -- Create the Warnings table
 CREATE TABLE Warnings (
-    ID INT PRIMARY KEY,
+    ID SERIAL PRIMARY KEY,
     Sensor_ID INT,
-    Experiment_ID INT,
+    -- Experiment_ID INT,
     Type VARCHAR(255),
     FOREIGN KEY (Sensor_ID) REFERENCES Sensors(ID),
-    FOREIGN KEY (Experiment_ID) REFERENCES Experiment(ID)
+    -- FOREIGN KEY (Experiment_ID) REFERENCES Experiment(ID)
 );
 
 -- Create the Sensors Data table
@@ -40,3 +40,7 @@ CREATE TABLE SensorsData (
     Humidity FLOAT,
     FOREIGN KEY (Sensor_ID) REFERENCES Sensors(ID)
 );
+
+-- Add the Processed column to an existing SensorsData table
+ALTER TABLE SensorsData
+ADD Processed BOOLEAN DEFAULT FALSE;
