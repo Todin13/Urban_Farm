@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     io.kompose.service: collecte-donnees
-  name: collecte_donnees
+  name: collecte-donnees
 spec:
   ports:
     - name: "8080"

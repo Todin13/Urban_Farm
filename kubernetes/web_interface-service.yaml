@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     io.kompose.service: web-interface
-  name: web_interface
+  name: web-interface
 spec:
   ports:
     - name: "8501"
