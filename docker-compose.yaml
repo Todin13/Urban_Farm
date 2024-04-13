@@ -24,31 +24,30 @@ services:
     environment:
       - SERVER_URL=http://localhost:8080/receive
       - SCENARIO_ID=4
-  sensor5: # sometimes send ICA= in place of mgspack
+  sensor5:
     image: abelfodil/sensor:0.0.1
     network_mode: "host"
     environment:
       - SERVER_URL=http://localhost:8080/receive
       - SCENARIO_ID=5
-  sensor6: # only send humidity on plant4
+  sensor6:
     image: abelfodil/sensor:0.0.1
     network_mode: "host"
     environment:
       - SERVER_URL=http://localhost:8080/receive
       - SCENARIO_ID=6
-  sensor7: # only send temperature on plant 5 with -500°F equivalent of -295.555°C
+  sensor7:
     image: abelfodil/sensor:0.0.1
     network_mode: "host"
     environment:
       - SERVER_URL=http://localhost:8080/receive
       - SCENARIO_ID=7
-  sensor8: #temperature et degres ne bouge pas 10°C et 12% on plant 6
+  sensor8:
     image: abelfodil/sensor:0.0.1
     network_mode: "host"
     environment:
       - SERVER_URL=http://localhost:8080/receive
       - SCENARIO_ID=8
-
   # sensorCustom:
   #   image: abelfodil/sensor:0.0.1
   #   network_mode: "host"
@@ -64,7 +63,6 @@ services:
     image: warnex/urbanfarm_0.11
     ports:
       - "8090:8090"
-
     environment:
       - DB_HOST=database
       - DB_PORT=5432
@@ -118,7 +116,6 @@ services:
       - ./src/database/urbanfarm_schema.sql:/docker-entrypoint-initdb.d/init.sql
     restart: unless-stopped  # This line should be indented to be part of the database service
 
-
   pgadmin:
     image: dpage/pgadmin4
     environment:
@@ -128,5 +125,7 @@ services:
       - "80:80"
     depends_on:
       - database
+    restart: unless-stopped  # This line should be indented to be part of the pgadmin service
 
+volumes:
   db-data:
